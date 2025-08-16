@@ -1,103 +1,112 @@
 <!DOCTYPE html>
 <html lang="gu">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Gujarat Recruitment Hub — Refer & Earn</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gujarat Recruitment Hub — Refer, Spin & Earn</title>
 
-<!-- confetti CDN -->
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-<style>
-:root{
-  --bg:#070707;
-  --card:#121212;
-  --primary:#00e6e6;
-  --accent:#ff6fbf;
-  --muted:#9aa0a6;
-  --glass: rgba(255,255,255,0.04);
-  --success:#00ffcc;
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family: "Noto Sans Gujarati", "Inter", system-ui, Arial, sans-serif;
-  background: linear-gradient(180deg,#050506,#0f1112);
-  color:#e6eef0;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
+  <style>
+  :root{
+    --bg:#070707;
+    --card:#121212;
+    --primary:#00e6e6;
+    --accent:#ff6fbf;
+    --muted:#9aa0a6;
+    --glass: rgba(255,255,255,0.04);
+    --success:#00ffcc;
+    --danger:#ff5252;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: "Noto Sans Gujarati", "Inter", system-ui, Arial, sans-serif;
+    background: linear-gradient(180deg,#050506,#0f1112);
+    color:#e6eef0;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
 
-/* Header */
-.header{
-  position:sticky;top:0;z-index:40;
-  display:flex;justify-content:space-between;align-items:center;
-  padding:12px 16px;background:linear-gradient(90deg,var(--primary),#0077ff);
-  box-shadow:0 6px 24px rgba(0,0,0,0.6);
-}
-.app-title{font-weight:800;font-size:16px}
-.points-pill{
-  background:linear-gradient(90deg,#ffd54f,#ff9100);color:#111;padding:6px 10px;border-radius:999px;font-weight:800;
-  box-shadow:0 8px 30px rgba(255,144,35,0.12);
-  display:flex;gap:10px;align-items:center;
-}
+  /* Header */
+  .header{
+    position:sticky;top:0;z-index:40;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:12px 16px;background:linear-gradient(90deg,var(--primary),#0077ff);
+    box-shadow:0 6px 24px rgba(0,0,0,0.6);
+  }
+  .app-title{font-weight:800;font-size:16px}
+  .points-pill{
+    background:linear-gradient(90deg,#ffd54f,#ff9100);color:#111;padding:6px 10px;border-radius:999px;font-weight:800;
+    box-shadow:0 8px 30px rgba(255,144,35,0.12);
+    display:flex;gap:10px;align-items:center;cursor:pointer
+  }
 
-/* main layout */
-.container{padding:16px;padding-bottom:110px}
+  /* main layout */
+  .container{padding:16px;padding-bottom:110px}
 
-/* cards grid */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
-.card{
-  background:var(--card);padding:12px;border-radius:12px;text-align:center;cursor:pointer;
-  box-shadow:0 6px 20px rgba(0,0,0,0.6);transition:transform .18s,box-shadow .18s,background .18s;
-  border:1px solid rgba(255,255,255,0.02);
-}
-.card:hover{transform:translateY(-6px) scale(1.02); box-shadow:0 12px 34px rgba(0,230,230,0.06); border-color:rgba(0,230,230,0.06)}
-.card .icon{font-size:22px;margin-bottom:8px;color:var(--primary)}
+  /* cards grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+  .card{
+    background:var(--card);padding:12px;border-radius:12px;text-align:center;cursor:pointer;
+    box-shadow:0 6px 20px rgba(0,0,0,0.6);transition:transform .18s,box-shadow .18s,background .18s;
+    border:1px solid rgba(255,255,255,0.02);
+  }
+  .card:hover{transform:translateY(-6px) scale(1.02); box-shadow:0 12px 34px rgba(0,230,230,0.06); border-color:rgba(0,230,230,0.06)}
+  .card .icon{font-size:22px;margin-bottom:8px;color:var(--primary)}
 
-/* refer box */
-.refer-box{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03); box-shadow:0 6px 20px rgba(0,0,0,0.6)}
-.small{color:var(--muted);font-size:13px}
+  /* refer box */
+  .refer-box{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03); box-shadow:0 6px 20px rgba(0,0,0,0.6)}
+  .small{color:var(--muted);font-size:13px}
 
-/* buttons */
-.btn{border:none;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:800}
-.btn.primary{background:linear-gradient(90deg,var(--primary),#00a6ff);color:#001;text-shadow:0 1px 0 rgba(255,255,255,0.02);box-shadow:0 8px 24px rgba(0,170,255,0.12)}
-.btn.ghost{background:rgba(255,255,255,0.03);color:#e6eef0}
+  /* buttons */
+  .btn{border:none;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:800}
+  .btn.primary{background:linear-gradient(90deg,var(--primary),#00a6ff);color:#001;text-shadow:0 1px 0 rgba(255,255,255,0.02);box-shadow:0 8px 24px rgba(0,170,255,0.12)}
+  .btn.ghost{background:rgba(255,255,255,0.03);color:#e6eef0}
+  .btn.warn{background:rgba(255,82,82,0.15);color:#ffd3d3;border:1px solid rgba(255,82,82,0.25)}
 
-/* footer nav */
-.footer{position:fixed;left:0;right:0;bottom:0;height:82px;background:rgba(2,6,8,0.85);display:flex;align-items:center;justify-content:space-around;border-top:1px solid rgba(255,255,255,0.02);backdrop-filter:blur(8px);z-index:50}
-.nav-btn{background:none;border:none;color:var(--muted);font-weight:700;display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px;cursor:pointer}
-.nav-btn.active{color:var(--primary);transform:translateY(-2px)}
+  /* footer nav */
+  .footer{position:fixed;left:0;right:0;bottom:0;height:82px;background:rgba(2,6,8,0.85);display:flex;align-items:center;justify-content:space-around;border-top:1px solid rgba(255,255,255,0.02);backdrop-filter:blur(8px);z-index:50}
+  .nav-btn{background:none;border:none;color:var(--muted);font-weight:700;display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px;cursor:pointer}
+  .nav-btn.active{color:var(--primary);transform:translateY(-2px)}
 
-/* quiz */
-.quiz-q{background:var(--card);padding:14px;border-radius:12px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.02)}
-.opt{padding:10px;border-radius:10px;margin:8px 0;background:rgba(255,255,255,0.02);cursor:pointer;border:1px solid rgba(255,255,255,0.02)}
-.opt.correct{background:rgba(0,255,204,0.12);border-color:rgba(0,255,204,0.25)}
-.opt.wrong{background:rgba(255,80,80,0.08);border-color:rgba(255,80,80,0.25)}
+  /* quiz */
+  .quiz-q{background:var(--card);padding:14px;border-radius:12px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.02)}
+  .opt{padding:10px;border-radius:10px;margin:8px 0;background:rgba(255,255,255,0.02);cursor:pointer;border:1px solid rgba(255,255,255,0.02)}
+  .opt.correct{background:rgba(0,255,204,0.12);border-color:rgba(0,255,204,0.25)}
+  .opt.wrong{background:rgba(255,80,80,0.08);border-color:rgba(255,80,80,0.25)}
 
-/* game */
-.game-box{background:var(--card);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);text-align:center}
-.coin{width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 35% 35%, #ffe082, #ffb300 60%, #ff8f00);display:grid;place-items:center;font-size:28px;margin:12px auto;box-shadow:0 8px 28px rgba(255,160,0,0.14);cursor:pointer;user-select:none;transition:transform .06s}
+  /* game */
+  .game-box{background:var(--card);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);text-align:center}
+  .coin{width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 35% 35%, #ffe082, #ffb300 60%, #ff8f00);display:grid;place-items:center;font-size:28px;margin:12px auto;box-shadow:0 8px 28px rgba(255,160,0,0.14);cursor:pointer;user-select:none;transition:transform .06s}
 
-/* toast */
-.toast{position:fixed;left:50%;transform:translateX(-50%);top:92px;background:#0b1112;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);display:none;z-index:200}
+  /* toast */
+  .toast{position:fixed;left:50%;transform:translateX(-50%);top:92px;background:#0b1112;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);display:none;z-index:200}
 
-/* helper */
-.hint{font-size:13px;color:var(--muted);margin-top:8px}
-.center{display:flex;align-items:center;justify-content:center}
+  /* helper */
+  .hint{font-size:13px;color:var(--muted);margin-top:8px}
+  .center{display:flex;align-items:center;justify-content:center}
 
-/* leaderboard */
-.leader-row{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:10px;border-bottom:1px solid rgba(255,255,255,0.03)}
-.leader-me{background:rgba(0,230,230,0.06)}
-</style>
+  /* leaderboard */
+  .leader-row{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:10px;border-bottom:1px solid rgba(255,255,255,0.03)}
+  .leader-me{background:rgba(0,230,230,0.06)}
+
+  /* modal */
+  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:120}
+  .modal .box{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:16px;min-width:320px;max-width:94vw;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
+  .modal .box h3{margin:0 0 8px 0}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.06);padding:4px 8px;border-radius:999px;font-size:12px}
+  </style>
 </head>
 <body>
 
 <!-- Header -->
 <div class="header">
   <div class="app-title">Gujarat Recruitment Hub</div>
-  <div class="points-pill" title="Total Points">
+  <div class="points-pill" title="Open Wallet" onclick="openWallet()">
     <div id="pointsAnimated" style="min-width:72px;text-align:center">0 pts</div>
   </div>
 </div>
@@ -176,6 +185,30 @@ body{
     </div>
   </div>
 
+  <!-- Spin -->
+  <div id="page-spin" class="page" style="display:none">
+    <h3>🎡 Daily Spin</h3>
+    <div class="card" style="padding:18px">
+      <div style="display:flex;justify-content:center;align-items:center;gap:16px;flex-wrap:wrap">
+        <div id="wheel" style="width:180px;height:180px;border-radius:50%;background:conic-gradient(#00e6e6 0 45deg,#7c4dff 45deg 90deg,#ff6fbf 90deg 135deg,#ffd54f 135deg 180deg,#66bb6a 180deg 225deg,#29b6f6 225deg 270deg,#ef5350 270deg 315deg,#ab47bc 315deg 360deg);box-shadow:0 12px 40px rgba(0,0,0,.4);position:relative"></div>
+        <div>
+          <div class="chips" style="margin-bottom:10px">
+            <span class="chip">5 pts</span>
+            <span class="chip">8 pts</span>
+            <span class="chip">10 pts</span>
+            <span class="chip">12 pts</span>
+            <span class="chip">15 pts</span>
+            <span class="chip">20 pts</span>
+          </div>
+          <button id="spinNow" class="btn primary">Spin Now</button>
+          <button id="resetSpinDev" class="btn ghost" style="margin-left:8px">Reset (dev)</button>
+          <p class="hint" id="spinHint">You can spin once per day.</p>
+          <p class="hint">Last spin: <span id="lastSpinTxt">—</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- Footer -->
@@ -184,11 +217,29 @@ body{
   <button class="nav-btn" onclick="goto('page-quiz', this)"><div>📝</div><div>Mock</div></button>
   <button class="nav-btn" onclick="goto('page-updates', this)"><div>🔔</div><div>Updates</div></button>
   <button class="nav-btn" onclick="goto('page-refer', this)"><div>🤝</div><div>Refer</div></button>
+  <button class="nav-btn" onclick="goto('page-spin', this)"><div>🎡</div><div>Spin</div></button>
   <button class="nav-btn" onclick="goto('page-game', this)"><div>🎮</div><div>Game</div></button>
 </div>
 
 <!-- toast -->
 <div id="toast" class="toast"></div>
+
+<!-- Wallet Modal -->
+<div id="walletModal" class="modal">
+  <div class="box">
+    <h3>💳 Wallet Balance</h3>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div class="small">Total Points</div>
+      <div style="font-weight:900" id="walletBalance">0</div>
+    </div>
+    <div style="margin-top:10px" class="small">Recent (local) history</div>
+    <div id="txnList" style="max-height:180px;overflow:auto;margin-top:6px;border-top:1px solid rgba(255,255,255,0.06)"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+      <button class="btn ghost" onclick="closeWallet()">Close</button>
+      <button class="btn warn" onclick="clearLocal()">Clear Local</button>
+    </div>
+  </div>
+</div>
 
 <script>
 /* ------------------ CONFIG & KEYS ------------------ */
@@ -198,6 +249,8 @@ const KEY_JOINED_CHANNEL = 'grh_joined_channel_v2';
 const KEY_LAST_LOGIN = 'grh_last_login_v2';
 const KEY_GAME_DAY = 'grh_game_day_v2';
 const KEY_GAME_EARNED = 'grh_game_earned_v2';
+const KEY_LAST_SPIN = 'grh_last_spin_v1';
+const KEY_TXN_HISTORY = 'grh_txn_history_v1';
 
 const DAILY_LOGIN_BONUS = 5;
 const GAME_DAILY_LIMIT = 50;
@@ -210,17 +263,29 @@ function showToast(msg, ms=1600){
   setTimeout(()=> t.style.display='none', ms);
 }
 function todayKey(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function pushTxn(text){
+  const arr = JSON.parse(localStorage.getItem(KEY_TXN_HISTORY)||'[]');
+  arr.unshift({ t: new Date().toISOString(), text });
+  localStorage.setItem(KEY_TXN_HISTORY, JSON.stringify(arr.slice(0,30)));
+}
+function renderTxns(){
+  const box = $('#txnList');
+  const arr = JSON.parse(localStorage.getItem(KEY_TXN_HISTORY)||'[]');
+  box.innerHTML = arr.length? arr.map(x=>`<div class="leader-row" style="border:none"><div class="small">${new Date(x.t).toLocaleString()}</div><div>${x.text}</div></div>`).join('') : '<div class="small">No local history</div>';
+}
 
 /* ------------------ POINTS (animated) ------------------ */
 function getPoints(){ return Number(localStorage.getItem(KEY_POINTS) || 0); }
 function setPoints(n){ localStorage.setItem(KEY_POINTS, String(n)); updatePointsDisplay(); }
 
-async function addPoints(n){
+async function addPoints(n, note){
   if(window.FIREBASE_READY && window.currentUserId){
     const to = await addPointsFirebase(n);
+    if(note) pushTxn(`${note} +${n}`);
     animatePoints(Number($('#pointsAnimated').dataset.val||0), to);
     return to;
   } else {
+    if(note) pushTxn(`${note} +${n}`);
     return addPointsLocal(n);
   }
 }
@@ -241,7 +306,7 @@ function animatePoints(from, to){
     const val = Math.round(from + (to - from) * (1 - Math.pow(1 - t, 3)));
     el.textContent = val + ' pts';
     el.dataset.val = val;
-    small.textContent = val;
+    if(small) small.textContent = val;
     if(t < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
@@ -250,7 +315,7 @@ function updatePointsDisplay(){
   const v = getPoints();
   $('#pointsAnimated').textContent = v + ' pts';
   $('#pointsAnimated').dataset.val = v;
-  $('#pointsSmall').textContent = v;
+  if($('#pointsSmall')) $('#pointsSmall').textContent = v;
 }
 
 /* ------------------ NAV ------------------ */
@@ -302,7 +367,7 @@ function renderQuiz(){
       o.onclick = ()=>{
         if(o.dataset.locked) return;
         box.querySelectorAll('.opt').forEach(x=> x.dataset.locked = 1);
-        if(opt === item.ans){ o.classList.add('correct'); addPoints(2); showToast('+2 pts'); }
+        if(opt === item.ans){ o.classList.add('correct'); addPoints(2, 'Quiz'); showToast('+2 pts'); }
         else { o.classList.add('wrong'); }
       };
       box.appendChild(o);
@@ -348,7 +413,7 @@ function copyLink(){ const link = buildRefLink(ensureRef()); navigator.clipboard
 function shareWhatsapp(){ const link = buildRefLink(ensureRef()); const msg = encodeURIComponent(`Gujarat Recruitment Hub — Refer & Earn\nJoin: ${link}`); window.open('https://wa.me/?text='+msg, '_blank'); }
 function shareTelegram(){ const link = buildRefLink(ensureRef()); const text = encodeURIComponent('Gujarat Recruitment Hub — Refer & Earn'); window.open('https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+text, '_blank'); }
 
-/* When someone opens with ?ref=CODE (local demo credit for joiner only; Firebase handles referrer) */
+// Handle incoming ?ref= (local demo)
 (function handleIncomingRefLocal(){
   const p = new URLSearchParams(window.location.search);
   const incoming = p.get('ref');
@@ -359,6 +424,7 @@ function shareTelegram(){ const link = buildRefLink(ensureRef()); const text = e
     if(!localStorage.getItem(joinKey)){
       addPointsLocal(10); // local joiner bonus if Firebase not ready
       localStorage.setItem(joinKey, '1');
+      pushTxn('Referral join bonus +10');
       showToast('Joined via referral — +10 pts');
     }
   }
@@ -370,7 +436,7 @@ function openChannel(){
   openLink(url);
   const key = KEY_JOINED_CHANNEL;
   if(!localStorage.getItem(key)){
-    addPoints(1000);
+    addPoints(1000, 'Channel Join');
     localStorage.setItem(key, '1');
     showToast('+1000 pts — Welcome!');
     confetti({ particleCount: 160, spread: 120, origin: { y: 0.6 }, colors: ['#ff6fbf','#00e6e6','#ffd54f','#7c4dff','#66bb6a'] });
@@ -385,7 +451,7 @@ function openChannel(){
   const today = todayKey();
   const last = localStorage.getItem(KEY_LAST_LOGIN);
   if(last !== today){
-    addPoints(DAILY_LOGIN_BONUS);
+    addPoints(DAILY_LOGIN_BONUS, 'Daily Login');
     localStorage.setItem(KEY_LAST_LOGIN, today);
     showToast(`Daily login +${DAILY_LOGIN_BONUS} pts`);
   }
@@ -421,12 +487,59 @@ $('#coin').addEventListener('click', ()=>{
   earned += 1;
   localStorage.setItem(KEY_GAME_EARNED, String(earned));
   $('#gameEarned').textContent = earned;
-  addPoints(1);
+  addPoints(1, 'Tap Game');
   $('#coin').style.transform = 'scale(0.95)';
   setTimeout(()=> $('#coin').style.transform = 'scale(1)', 80);
 });
-
 function resetGameDaily(){ localStorage.removeItem(KEY_GAME_DAY); localStorage.removeItem(KEY_GAME_EARNED); $('#gameEarned').textContent = '0'; showToast('Daily game reset (dev)'); }
+
+/* ------------------ SPIN: Daily once ------------------ */
+function getTodayDateStr(){ return new Date().toDateString(); }
+async function doSpin(){
+  // Check Firebase first
+  if(window.FIREBASE_READY && window.currentUserId){
+    const { getFirestore, doc, getDoc, updateDoc, setDoc, increment } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js');
+    const db = window._db;
+    const uid = window.currentUserId;
+    const ref = doc(db,'users',uid);
+    const snap = await getDoc(ref);
+    if(!snap.exists()) await setDoc(ref,{ points:0, lastSpin:null },{ merge:true });
+    const data = snap.data()||{};
+    const today = getTodayDateStr();
+    if(data.lastSpin === today){ showToast('Already spun today!'); return; }
+    const pts = Math.floor(Math.random()*16)+5; // 5–20
+    await updateDoc(ref,{ points: increment(pts), lastSpin: today });
+    localStorage.setItem(KEY_POINTS, String((data.points||0)+pts));
+    animatePoints(Number($('#pointsAnimated').dataset.val||0), (data.points||0)+pts);
+    pushTxn(`Spin +${pts}`);
+    confetti({ particleCount: 160, spread: 120, origin: { y: 0.6 } });
+    confetti({ particleCount: 60, spread: 40, origin: { y: 0.35 } });
+    showToast(`🎉 You won +${pts} pts`);
+    $('#lastSpinTxt').textContent = today;
+    return;
+  }
+  // Local-only fallback
+  const today = getTodayDateStr();
+  const last = localStorage.getItem(KEY_LAST_SPIN);
+  if(last === today){ showToast('Already spun today!'); return; }
+  const pts = Math.floor(Math.random()*16)+5;
+  addPointsLocal(pts);
+  pushTxn(`Spin +${pts}`);
+  localStorage.setItem(KEY_LAST_SPIN, today);
+  $('#lastSpinTxt').textContent = today;
+  confetti({ particleCount: 160, spread: 120, origin: { y: 0.6 } });
+  confetti({ particleCount: 60, spread: 40, origin: { y: 0.35 } });
+  showToast(`🎉 You won +${pts} pts`);
+}
+
+/* ------------------ WALLET MODAL ------------------ */
+function openWallet(){
+  $('#walletModal').style.display='flex';
+  $('#walletBalance').textContent = getPoints();
+  renderTxns();
+}
+function closeWallet(){ $('#walletModal').style.display='none'; }
+function clearLocal(){ localStorage.removeItem(KEY_TXN_HISTORY); renderTxns(); }
 
 /* ------------------ INIT ------------------ */
 function init(){
@@ -436,23 +549,27 @@ function init(){
   ensureRef();
   updatePointsDisplay();
   $('#GAME_LIMIT').textContent = GAME_DAILY_LIMIT;
-  $('#gameEarned').textContent = localStorage.getItem(KEY_GAME_EARNED) || '0';
+  const ge = localStorage.getItem(KEY_GAME_EARNED) || '0';
+  if($('#gameEarned')) $('#gameEarned').textContent = ge;
+  $('#spinNow').addEventListener('click', doSpin);
+  $('#resetSpinDev').addEventListener('click', ()=>{ localStorage.removeItem(KEY_LAST_SPIN); $('#lastSpinTxt').textContent='—'; showToast('Spin reset (dev)'); });
+  const l = localStorage.getItem(KEY_LAST_SPIN); if(l) $('#lastSpinTxt').textContent = l;
 }
 init();
 </script>
 
-<!-- ===================== FIREBASE (Referral + Leaderboard) ===================== -->
+<!-- ===================== FIREBASE (Referral + Leaderboard + Spin persistence) ===================== -->
 <script type="module">
   // ---- Replace with your Firebase config ----
   const firebaseConfig = {
-      apiKey: "AIzaSyDNRTY-dPDXHIzpYPm9OClUr4ucZNmb3tM",
-  authDomain: "guj-recruit-site.firebaseapp.com",
-  projectId: "guj-recruit-site",
-  storageBucket: "guj-recruit-site.firebasestorage.app",
-  messagingSenderId: "183532061050",
-  appId: "1:183532061050:web:0c65a374c88f7c8b4116c3",
-  measurementId: "G-PWDR359Y97"
-};
+    apiKey: "AIzaSyDNRTY-dPDXHIzpYPm9OClUr4ucZNmb3tM",
+    authDomain: "guj-recruit-site.firebaseapp.com",
+    projectId: "guj-recruit-site",
+    storageBucket: "guj-recruit-site.firebasestorage.app",
+    messagingSenderId: "183532061050",
+    appId: "1:183532061050:web:0c65a374c88f7c8b4116c3",
+    measurementId: "G-PWDR359Y97"
+  };
 
   // If config is not filled, skip Firebase and keep local-only mode
   const missingConfig = !firebaseConfig.apiKey || firebaseConfig.apiKey === 'YOUR_API_KEY';
@@ -466,6 +583,7 @@ init();
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
       const db = getFirestore(app);
+      window._db = db;
 
       window.FIREBASE_READY = true;
       window.currentUserId = null;
@@ -473,13 +591,14 @@ init();
       // helper exposed to earlier script
       window.addPointsFirebase = async function(n){
         const ref = doc(db, 'users', window.currentUserId);
-        await setDoc(ref, { points: 0, joinedAt: new Date(), referrals: [] }, { merge: true });
+        await setDoc(ref, { points: 0, joinedAt: new Date(), referrals: [], lastSpin: null }, { merge: true });
         await updateDoc(ref, { points: increment(n) });
         const snap = await getDoc(ref);
         const pts = snap.data()?.points || 0;
         // mirror local for offline consistency
         localStorage.setItem(KEY_POINTS, String(pts));
-        $('#pointsSmall').textContent = pts;
+        const small = document.getElementById('pointsSmall');
+        if(small) small.textContent = pts;
         return pts;
       }
 
@@ -496,7 +615,8 @@ init();
           rank++;
         });
         if(!html) html = '<div class="leader-row"><div>No data yet</div><div>—</div></div>';
-        document.getElementById('leaderboard').innerHTML = html;
+        const lb = document.getElementById('leaderboard');
+        if(lb) lb.innerHTML = html;
       }
 
       function setRefUI(uid){
@@ -508,7 +628,7 @@ init();
       }
 
       function ensureUserDoc(uid){
-        return setDoc(doc(db,'users',uid), { points:0, referrals:[], referredBy: null, joinedAt: new Date() }, { merge:true });
+        return setDoc(doc(db,'users',uid), { points:0, referrals:[], referredBy: null, joinedAt: new Date(), lastSpin: null }, { merge:true });
       }
 
       async function handleReferral(uid){
@@ -521,15 +641,16 @@ init();
         const already = meSnap.exists() && meSnap.data().referredBy;
         if(already) return;
         await setDoc(meRef, { referredBy: ref }, { merge:true });
-        // credit referrer + new user
+        // credit referrer + new user (same as original app)
         await updateDoc(doc(db,'users',ref), { points: increment(20), referrals: arrayUnion(uid) });
         await updateDoc(meRef, { points: increment(10) });
         showToast('Referral applied 🎉 +10 pts');
         const snap = await getDoc(meRef);
         const pts = snap.data()?.points || 0;
         localStorage.setItem(KEY_POINTS, String(pts));
-        $('#pointsAnimated').textContent = pts + ' pts';
-        $('#pointsSmall').textContent = pts;
+        const pa = document.getElementById('pointsAnimated');
+        if(pa){ pa.textContent = pts + ' pts'; pa.dataset.val = pts; }
+        const ps = document.getElementById('pointsSmall'); if(ps) ps.textContent = pts;
       }
 
       onAuthStateChanged(auth, async (user)=>{
@@ -539,11 +660,13 @@ init();
           setRefUI(user.uid);
           // sync points from server into UI/local
           const snap = await getDoc(doc(db,'users',user.uid));
-          const pts = snap.data()?.points || 0;
+          const d = snap.data()||{};
+          const pts = d.points || 0;
           localStorage.setItem(KEY_POINTS, String(pts));
-          $('#pointsAnimated').textContent = pts + ' pts';
-          $('#pointsAnimated').dataset.val = pts;
-          $('#pointsSmall').textContent = pts;
+          const pa = document.getElementById('pointsAnimated');
+          if(pa){ pa.textContent = pts + ' pts'; pa.dataset.val = pts; }
+          const ps = document.getElementById('pointsSmall'); if(ps) ps.textContent = pts;
+          if(d.lastSpin) document.getElementById('lastSpinTxt').textContent = d.lastSpin;
           // handle referral if opened with ?ref=
           await handleReferral(user.uid);
           // load leaderboard
