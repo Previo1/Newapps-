@@ -86,9 +86,14 @@ body{
 /* helper */
 .hint{font-size:13px;color:var(--muted);margin-top:8px}
 .center{display:flex;align-items:center;justify-content:center}
+
+/* leaderboard */
+.leader-row{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:10px;border-bottom:1px solid rgba(255,255,255,0.03)}
+.leader-me{background:rgba(0,230,230,0.06)}
 </style>
 </head>
 <body>
+
 <!-- Header -->
 <div class="header">
   <div class="app-title">Gujarat Recruitment Hub</div>
@@ -113,11 +118,14 @@ body{
     <div id="quizContainer"></div>
   </div>
 
-  <!-- Updates -->
+  <!-- Updates + Leaderboard -->
   <div id="page-updates" class="page" style="display:none">
     <h3>Updates</h3>
     <div id="updatesList"></div>
     <p class="hint" id="lastSync"></p>
+
+    <h3 style="margin-top:18px">🏆 Leaderboard (Top 10)</h3>
+    <div id="leaderboard" class="card" style="padding:0"></div>
   </div>
 
   <!-- Refer -->
@@ -135,8 +143,10 @@ body{
         </div>
       </div>
 
+      <div class="small" style="margin-top:6px;word-break:break-all">Link: <span id="myRefLink">--</span></div>
+
       <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn primary" onclick="copyLink()">https://t.me/Nownewrobot</button>
+        <button class="btn primary" onclick="copyLink()">Copy Referral Link</button>
         <button class="btn ghost" onclick="shareWhatsapp()">WhatsApp</button>
         <button class="btn ghost" onclick="shareTelegram()">Telegram</button>
       </div>
@@ -148,7 +158,7 @@ body{
         <div class="small">Join ચેનલ: <a href="https://t.me/granthnirman" target="_blank" style="color:var(--primary)">https://t.me/granthnirman</a></div>
       </div>
 
-      <p class="hint">નોંધ: Join થયા પછી local browser માં એકવાર જ 1000 પોઇન્ટ આપ્યા જશે. For real cross-device credits, server/backend required.</p>
+      <p class="hint">નોંધ: Join થયા પછી local browser માં એકવાર જ 1000 પોઇન્ટ આપ્યા જશે. For real cross-device credits, Firebase enabled.</p>
     </div>
   </div>
 
@@ -204,7 +214,17 @@ function todayKey(){ const d=new Date(); return `${d.getFullYear()}-${String(d.g
 /* ------------------ POINTS (animated) ------------------ */
 function getPoints(){ return Number(localStorage.getItem(KEY_POINTS) || 0); }
 function setPoints(n){ localStorage.setItem(KEY_POINTS, String(n)); updatePointsDisplay(); }
-function addPoints(n){
+
+async function addPoints(n){
+  if(window.FIREBASE_READY && window.currentUserId){
+    const to = await addPointsFirebase(n);
+    animatePoints(Number($('#pointsAnimated').dataset.val||0), to);
+    return to;
+  } else {
+    return addPointsLocal(n);
+  }
+}
+function addPointsLocal(n){
   const from = getPoints();
   const to = from + n;
   localStorage.setItem(KEY_POINTS, String(to));
@@ -218,17 +238,18 @@ function animatePoints(from, to){
   const start = performance.now();
   function step(now){
     const t = Math.min(1, (now - start)/duration);
-    const val = Math.round(from + (to - from) * easeOutCubic(t));
+    const val = Math.round(from + (to - from) * (1 - Math.pow(1 - t, 3)));
     el.textContent = val + ' pts';
+    el.dataset.val = val;
     small.textContent = val;
     if(t < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
 }
-function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
 function updatePointsDisplay(){
   const v = getPoints();
   $('#pointsAnimated').textContent = v + ' pts';
+  $('#pointsAnimated').dataset.val = v;
   $('#pointsSmall').textContent = v;
 }
 
@@ -267,7 +288,7 @@ function renderSites(){
 
 /* ------------------ QUIZ ------------------ */
 const quiz = [
-  {q: "ભારતના પ્રથમ વડાપ્રધાન કોણ હતા?", opts:["સર્દાર પટેલ","મહાત્મા ગાંધી","જવાહરલાલ નેહરુ","લાલ બહાદુર શાસ્ત્રી"], ans:"જવાહરલાલ નેહરુ"},
+  {q: "ભારતના પ્રથમ વડાપ્રધાન કોણ હતા?", opts:["સરદાર પટેલ","મહાત્મા ગાંધી","જવાહરલાલ નેહરુ","લાલ બહાદુર શાસ્ત્રી"], ans:"જવાહરલાલ નેહરુ"},
   {q: "ગુજરાતની રાજધાની કઈ છે?", opts:["અમદાવાદ","ગાંધીનગર","વડોદરા","સુરત"], ans:"ગાંધીનગર"}
 ];
 function renderQuiz(){
@@ -307,9 +328,19 @@ function renderUpdates(){
 
 /* ------------------ REFERRAL & SHARE ------------------ */
 function ensureRef(){
+  // Prefer Firebase UID if available
+  if(window.currentUserId){
+    $('#myRef').textContent = window.currentUserId;
+    const link = buildRefLink(window.currentUserId);
+    $('#myRefLink').textContent = link;
+    return window.currentUserId;
+  }
+  // fallback to local code
   let code = localStorage.getItem(KEY_REF);
   if(!code){ code = 'GUJ' + Math.random().toString(36).slice(2,7).toUpperCase(); localStorage.setItem(KEY_REF, code); }
   $('#myRef').textContent = code;
+  const link = buildRefLink(code);
+  $('#myRefLink').textContent = link;
   return code;
 }
 function buildRefLink(code){ return location.origin + location.pathname + '?ref=' + encodeURIComponent(code); }
@@ -317,8 +348,8 @@ function copyLink(){ const link = buildRefLink(ensureRef()); navigator.clipboard
 function shareWhatsapp(){ const link = buildRefLink(ensureRef()); const msg = encodeURIComponent(`Gujarat Recruitment Hub — Refer & Earn\nJoin: ${link}`); window.open('https://wa.me/?text='+msg, '_blank'); }
 function shareTelegram(){ const link = buildRefLink(ensureRef()); const text = encodeURIComponent('Gujarat Recruitment Hub — Refer & Earn'); window.open('https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+text, '_blank'); }
 
-/* When someone opens with ?ref=CODE (demo: credit joiner + attempt server notify for referrer) */
-(function handleIncomingRef(){
+/* When someone opens with ?ref=CODE (local demo credit for joiner only; Firebase handles referrer) */
+(function handleIncomingRefLocal(){
   const p = new URLSearchParams(window.location.search);
   const incoming = p.get('ref');
   if(!incoming) return;
@@ -326,13 +357,9 @@ function shareTelegram(){ const link = buildRefLink(ensureRef()); const text = e
   if(incoming && incoming !== myCode){
     const joinKey = 'grh_joined_via_' + incoming;
     if(!localStorage.getItem(joinKey)){
-      addPoints(10); // joiner bonus locally
+      addPointsLocal(10); // local joiner bonus if Firebase not ready
       localStorage.setItem(joinKey, '1');
       showToast('Joined via referral — +10 pts');
-
-      // Placeholder to notify server to credit the referrer (replace with your endpoint)
-      // fetch('/api/credit-referrer', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({refCode: incoming})});
-      console.log('Would notify server to credit referrer:', incoming);
     }
   }
 })();
@@ -346,25 +373,14 @@ function openChannel(){
     addPoints(1000);
     localStorage.setItem(key, '1');
     showToast('+1000 pts — Welcome!');
-    // confetti celebration
-    confetti({
-      particleCount: 160,
-      spread: 120,
-      origin: { y: 0.6 },
-      colors: ['#ff6fbf','#00e6e6','#ffd54f','#7c4dff','#66bb6a']
-    });
-    // small burst center
-    confetti({
-      particleCount: 60,
-      spread: 40,
-      origin: { y: 0.35 }
-    });
+    confetti({ particleCount: 160, spread: 120, origin: { y: 0.6 }, colors: ['#ff6fbf','#00e6e6','#ffd54f','#7c4dff','#66bb6a'] });
+    confetti({ particleCount: 60, spread: 40, origin: { y: 0.35 } });
   } else {
     showToast('તમે પહેલેથી જ 1000 પોઇન્ટ લઈ ચૂક્યા છો');
   }
 }
 
-/* ------------------ DAILY LOGIN BONUS ------------------ */
+/* ------------------ DAILY LOGIN BONUS (local) ------------------ */
 (function dailyLogin(){
   const today = todayKey();
   const last = localStorage.getItem(KEY_LAST_LOGIN);
@@ -406,31 +422,146 @@ $('#coin').addEventListener('click', ()=>{
   localStorage.setItem(KEY_GAME_EARNED, String(earned));
   $('#gameEarned').textContent = earned;
   addPoints(1);
-  // tiny coin pop
   $('#coin').style.transform = 'scale(0.95)';
   setTimeout(()=> $('#coin').style.transform = 'scale(1)', 80);
 });
 
-/* Reset daily (dev) */
 function resetGameDaily(){ localStorage.removeItem(KEY_GAME_DAY); localStorage.removeItem(KEY_GAME_EARNED); $('#gameEarned').textContent = '0'; showToast('Daily game reset (dev)'); }
 
 /* ------------------ INIT ------------------ */
 function init(){
-  // UI initial
   renderSites();
   renderQuiz();
   renderUpdates();
   ensureRef();
   updatePointsDisplay();
-
-  // show game limit
   $('#GAME_LIMIT').textContent = GAME_DAILY_LIMIT;
   $('#gameEarned').textContent = localStorage.getItem(KEY_GAME_EARNED) || '0';
-
-  // If page opened with ref param AND user clicks join channel externally, they may join — we credit locally when openChannel pressed.
 }
 init();
-
 </script>
+
+<!-- ===================== FIREBASE (Referral + Leaderboard) ===================== -->
+<script type="module">
+  // ---- Replace with your Firebase config ----
+  const firebaseConfig = {
+      apiKey: "AIzaSyDNRTY-dPDXHIzpYPm9OClUr4ucZNmb3tM",
+  authDomain: "guj-recruit-site.firebaseapp.com",
+  projectId: "guj-recruit-site",
+  storageBucket: "guj-recruit-site.firebasestorage.app",
+  messagingSenderId: "183532061050",
+  appId: "1:183532061050:web:0c65a374c88f7c8b4116c3",
+  measurementId: "G-PWDR359Y97"
+};
+
+  // If config is not filled, skip Firebase and keep local-only mode
+  const missingConfig = !firebaseConfig.apiKey || firebaseConfig.apiKey === 'YOUR_API_KEY';
+
+  if(!missingConfig){
+    try{
+      const { initializeApp } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js');
+      const { getAuth, signInAnonymously, onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js');
+      const { getFirestore, doc, setDoc, getDoc, updateDoc, increment, arrayUnion, collection, query, orderBy, limit, getDocs } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js');
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      window.FIREBASE_READY = true;
+      window.currentUserId = null;
+
+      // helper exposed to earlier script
+      window.addPointsFirebase = async function(n){
+        const ref = doc(db, 'users', window.currentUserId);
+        await setDoc(ref, { points: 0, joinedAt: new Date(), referrals: [] }, { merge: true });
+        await updateDoc(ref, { points: increment(n) });
+        const snap = await getDoc(ref);
+        const pts = snap.data()?.points || 0;
+        // mirror local for offline consistency
+        localStorage.setItem(KEY_POINTS, String(pts));
+        $('#pointsSmall').textContent = pts;
+        return pts;
+      }
+
+      async function loadLeaderboard(){
+        const q = query(collection(db,'users'), orderBy('points','desc'), limit(10));
+        const snap = await getDocs(q);
+        const uid = window.currentUserId;
+        let html = '';
+        let rank = 1;
+        snap.forEach(docu=>{
+          const d = docu.data();
+          const me = (docu.id === uid);
+          html += `<div class="leader-row ${me?'leader-me':''}"><div>#${rank} ${me?'👤 You':docu.id.slice(0,6)}</div><div>${d.points||0} pts</div></div>`;
+          rank++;
+        });
+        if(!html) html = '<div class="leader-row"><div>No data yet</div><div>—</div></div>';
+        document.getElementById('leaderboard').innerHTML = html;
+      }
+
+      function setRefUI(uid){
+        const link = location.origin + location.pathname + '?ref=' + encodeURIComponent(uid);
+        const elCode = document.getElementById('myRef');
+        const elLink = document.getElementById('myRefLink');
+        if(elCode) elCode.textContent = uid;
+        if(elLink) elLink.textContent = link;
+      }
+
+      function ensureUserDoc(uid){
+        return setDoc(doc(db,'users',uid), { points:0, referrals:[], referredBy: null, joinedAt: new Date() }, { merge:true });
+      }
+
+      async function handleReferral(uid){
+        const p = new URLSearchParams(location.search);
+        const ref = p.get('ref');
+        if(!ref || ref === uid) return;
+        // credit only once per referrer for this user
+        const meRef = doc(db,'users',uid);
+        const meSnap = await getDoc(meRef);
+        const already = meSnap.exists() && meSnap.data().referredBy;
+        if(already) return;
+        await setDoc(meRef, { referredBy: ref }, { merge:true });
+        // credit referrer + new user
+        await updateDoc(doc(db,'users',ref), { points: increment(20), referrals: arrayUnion(uid) });
+        await updateDoc(meRef, { points: increment(10) });
+        showToast('Referral applied 🎉 +10 pts');
+        const snap = await getDoc(meRef);
+        const pts = snap.data()?.points || 0;
+        localStorage.setItem(KEY_POINTS, String(pts));
+        $('#pointsAnimated').textContent = pts + ' pts';
+        $('#pointsSmall').textContent = pts;
+      }
+
+      onAuthStateChanged(auth, async (user)=>{
+        if(user){
+          window.currentUserId = user.uid;
+          await ensureUserDoc(user.uid);
+          setRefUI(user.uid);
+          // sync points from server into UI/local
+          const snap = await getDoc(doc(db,'users',user.uid));
+          const pts = snap.data()?.points || 0;
+          localStorage.setItem(KEY_POINTS, String(pts));
+          $('#pointsAnimated').textContent = pts + ' pts';
+          $('#pointsAnimated').dataset.val = pts;
+          $('#pointsSmall').textContent = pts;
+          // handle referral if opened with ?ref=
+          await handleReferral(user.uid);
+          // load leaderboard
+          await loadLeaderboard();
+        }
+      });
+
+      // Start anonymous login (if not already)
+      signInAnonymously(auth).catch(e=> console.error('Anon sign-in error', e));
+
+    }catch(e){
+      console.warn('Firebase failed to init. Falling back to local-only mode.', e);
+      window.FIREBASE_READY = false;
+    }
+  } else {
+    window.FIREBASE_READY = false;
+  }
+</script>
+
 </body>
 </html>
