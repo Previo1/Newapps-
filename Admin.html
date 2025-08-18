@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="utf-8">
+  <title>Admin Panel — Gujarat Recruitment Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family:"Noto Sans Gujarati",Arial,sans-serif;
+      background:#0f1112;
+      color:#e6eef0;
+      margin:0; padding:20px;
+    }
+    h2 { color:#00e6e6 }
+    .input-box { margin-bottom:12px }
+    textarea { width:100%; height:100px; padding:8px; border-radius:6px; border:none }
+    button {
+      background:#00e6e6; border:none; padding:10px 16px; border-radius:6px; cursor:pointer;
+      font-weight:bold; color:#000
+    }
+    .card { background:#1b1b1b; padding:10px; border-radius:6px; margin:6px 0 }
+  </style>
+</head>
+<body>
+  <h2>Admin Panel</h2>
+
+  <div class="input-box">
+    <label>નવી Update ઉમેરો:</label><br>
+    <textarea id="updateText" placeholder="Update લખો..."></textarea><br>
+    <button onclick="addUpdate()">➕ Add Update</button>
+  </div>
+
+  <h3>All Updates</h3>
+  <div id="allUpdates"></div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDNRTY-dPDXHIzpYPm9OClUr4ucZNmb3tM",
+      authDomain: "guj-recruit-site.firebaseapp.com",
+      projectId: "guj-recruit-site",
+      storageBucket: "guj-recruit-site.firebasestorage.app",
+      messagingSenderId: "183532061050",
+      appId: "1:183532061050:web:0c65a374c88f7c8b4116c3",
+      measurementId: "G-PWDR359Y97"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Add new update
+    async function addUpdate(){
+      const text=document.getElementById("updateText").value.trim();
+      if(!text){ alert("Please enter update text"); return; }
+      await addDoc(collection(db,"updates"),{
+        text:text,
+        time: serverTimestamp()
+      });
+      alert("Update Added!");
+      document.getElementById("updateText").value="";
+      loadUpdates();
+    }
+
+    // Load all updates
+    async function loadUpdates(){
+      const q=query(collection(db,"updates"), orderBy("time","desc"));
+      const snap=await getDocs(q);
+      let html="";
+      snap.forEach(doc=>{
+        const d=doc.data();
+        const time = d.time ? d.time.toDate().toLocaleString() : "";
+        html+=`<div class="card"><b>${d.text}</b><br><small>${time}</small></div>`;
+      });
+      document.getElementById("allUpdates").innerHTML=html || "<p>No updates</p>";
+    }
+
+    loadUpdates();
+    window.addUpdate=addUpdate;
+  </script>
+</body>
+</html>
