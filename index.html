@@ -172,18 +172,12 @@
   </div>
 
   <!-- Game -->
-  <div id="page-game" class="page" style="display:none">
-    <h3>Tap the Coin (Earn)</h3>
-    <div class="game-box">
-      <div id="coin" class="coin">🪙</div>
-      <div style="display:flex;gap:8px;justify-content:center;margin-top:8px">
-        <button class="btn primary" onclick="startGame()">Start 15s Round</button>
-        <button class="btn ghost" onclick="resetGameDaily()">Reset Daily (dev)</button>
-      </div>
-      <p class="hint">Daily game limit: <span id="gameEarned">0</span> / <span id="GAME_LIMIT">50</span> pts</p>
-      <p class="hint">Round time left: <span id="timeLeft">0</span>s</p>
-    </div>
-  </div>
+ <script>
+document.getElementById("gameMenuBtn").addEventListener("click", () => {
+  window.open("https://bytecoin-virid.vercel.app/", "_blank");
+});
+</script>
+
 
 
   <!-- Spin -->
