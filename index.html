@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="gu">
 <head>
@@ -82,7 +81,6 @@
 
   /* game */
   .game-box{background:var(--card);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);text-align:center}
-
   .coin{width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 35% 35%, #ffe082, #ffb300 60%, #ff8f00);display:grid;place-items:center;font-size:28px;margin:12px auto;box-shadow:0 8px 28px rgba(255,160,0,0.14);cursor:pointer;user-select:none;transition:transform .06s}
 
   /* toast */
@@ -266,7 +264,7 @@ function showToast(msg, ms=1600){
   const t = $('#toast'); t.textContent = msg; t.style.display='block';
   setTimeout(()=> t.style.display='none', ms);
 }
-function todayKey(){ const d=new Date(); return ${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}; }
+function todayKey(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 function pushTxn(text){
   const arr = JSON.parse(localStorage.getItem(KEY_TXN_HISTORY)||'[]');
   arr.unshift({ t: new Date().toISOString(), text });
@@ -275,7 +273,7 @@ function pushTxn(text){
 function renderTxns(){
   const box = $('#txnList');
   const arr = JSON.parse(localStorage.getItem(KEY_TXN_HISTORY)||'[]');
-  box.innerHTML = arr.length? arr.map(x=><div class="leader-row" style="border:none"><div class="small">${new Date(x.t).toLocaleString()}</div><div>${x.text}</div></div>).join('') : '<div class="small">No local history</div>';
+  box.innerHTML = arr.length? arr.map(x=>`<div class="leader-row" style="border:none"><div class="small">${new Date(x.t).toLocaleString()}</div><div>${x.text}</div></div>`).join('') : '<div class="small">No local history</div>';
 }
 
 /* ------------------ POINTS (animated) ------------------ */
@@ -285,11 +283,11 @@ function setPoints(n){ localStorage.setItem(KEY_POINTS, String(n)); updatePoints
 async function addPoints(n, note){
   if(window.FIREBASE_READY && window.currentUserId){
     const to = await addPointsFirebase(n);
-    if(note) pushTxn(${note} +${n});
+    if(note) pushTxn(`${note} +${n}`);
     animatePoints(Number($('#pointsAnimated').dataset.val||0), to);
     return to;
   } else {
-    if(note) pushTxn(${note} +${n});
+    if(note) pushTxn(`${note} +${n}`);
     return addPointsLocal(n);
   }
 }
@@ -349,7 +347,7 @@ function renderSites(){
   sites.forEach(s=>{
     const d = document.createElement('div');
     d.className = 'card';
-    d.innerHTML = <div class="icon">${s.icon}</div><div style="font-weight:800">${s.name}</div><div class="small" style="margin-top:6px">${s.url.replace(/^https?:\/\//,'')}</div>;
+    d.innerHTML = `<div class="icon">${s.icon}</div><div style="font-weight:800">${s.name}</div><div class="small" style="margin-top:6px">${s.url.replace(/^https?:\/\//,'')}</div>`;
     d.onclick = ()=> openLink(s.url);
     grid.appendChild(d);
   });
@@ -389,7 +387,7 @@ function renderUpdates(){
   const ul = $('#updatesList'); ul.innerHTML='';
   updates.sort((a,b)=> new Date(b.time)-new Date(a.time)).forEach(u=>{
     const c = document.createElement('div'); c.className='card';
-    c.innerHTML = <div style="font-weight:800">${u.text}</div><div class="small" style="margin-top:6px">${new Date(u.time).toLocaleString()}</div>;
+    c.innerHTML = `<div style="font-weight:800">${u.text}</div><div class="small" style="margin-top:6px">${new Date(u.time).toLocaleString()}</div>`;
     ul.appendChild(c);
   });
   $('#lastSync').textContent = 'Last sync: ' + new Date().toLocaleTimeString();
@@ -414,7 +412,7 @@ function ensureRef(){
 }
 function buildRefLink(code){ return location.origin + location.pathname + '?ref=' + encodeURIComponent(code); }
 function copyLink(){ const link = buildRefLink(ensureRef()); navigator.clipboard.writeText(link).then(()=> showToast('Referral link copied')); }
-function shareWhatsapp(){ const link = buildRefLink(ensureRef()); const msg = encodeURIComponent(Gujarat Recruitment Hub — Refer & Earn\nJoin: ${link}); window.open('https://wa.me/?text='+msg, '_blank'); }
+function shareWhatsapp(){ const link = buildRefLink(ensureRef()); const msg = encodeURIComponent(`Gujarat Recruitment Hub — Refer & Earn\nJoin: ${link}`); window.open('https://wa.me/?text='+msg, '_blank'); }
 function shareTelegram(){ const link = buildRefLink(ensureRef()); const text = encodeURIComponent('Gujarat Recruitment Hub — Refer & Earn'); window.open('https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+text, '_blank'); }
 
 // Handle incoming ?ref= (local demo)
@@ -435,7 +433,6 @@ function shareTelegram(){ const link = buildRefLink(ensureRef()); const text = e
 })();
 
 /* ------------------ Join Channel -> 1000 pts + confetti ------------------ */
-
 function openChannel(){
   const url = 'https://t.me/granthnirman';
   openLink(url);
@@ -458,7 +455,7 @@ function openChannel(){
   if(last !== today){
     addPoints(DAILY_LOGIN_BONUS, 'Daily Login');
     localStorage.setItem(KEY_LAST_LOGIN, today);
-    showToast(Daily login +${DAILY_LOGIN_BONUS} pts);
+    showToast(`Daily login +${DAILY_LOGIN_BONUS} pts`);
   }
 })();
 
@@ -515,12 +512,11 @@ async function doSpin(){
     const pts = Math.floor(Math.random()*16)+5; // 5–20
     await updateDoc(ref,{ points: increment(pts), lastSpin: today });
     localStorage.setItem(KEY_POINTS, String((data.points||0)+pts));
-    animatePoints(Number($('#pointsAnimated').dataset.val0), (data.points0)+pts);
-    pushTxn(Spin +${pts});
+    animatePoints(Number($('#pointsAnimated').dataset.val||0), (data.points||0)+pts);
+    pushTxn(`Spin +${pts}`);
     confetti({ particleCount: 160, spread: 120, origin: { y: 0.6 } });
     confetti({ particleCount: 60, spread: 40, origin: { y: 0.35 } });
-
-    showToast(🎉 You won +${pts} pts);
+    showToast(`🎉 You won +${pts} pts`);
     $('#lastSpinTxt').textContent = today;
     return;
   }
@@ -530,12 +526,12 @@ async function doSpin(){
   if(last === today){ showToast('Already spun today!'); return; }
   const pts = Math.floor(Math.random()*16)+5;
   addPointsLocal(pts);
-  pushTxn(Spin +${pts});
+  pushTxn(`Spin +${pts}`);
   localStorage.setItem(KEY_LAST_SPIN, today);
   $('#lastSpinTxt').textContent = today;
   confetti({ particleCount: 160, spread: 120, origin: { y: 0.6 } });
   confetti({ particleCount: 60, spread: 40, origin: { y: 0.35 } });
-  showToast(🎉 You won +${pts} pts);
+  showToast(`🎉 You won +${pts} pts`);
 }
 
 /* ------------------ WALLET MODAL ------------------ */
@@ -610,7 +606,6 @@ init();
 
       async function loadLeaderboard(){
         const q = query(collection(db,'users'), orderBy('points','desc'), limit(10));
-
         const snap = await getDocs(q);
         const uid = window.currentUserId;
         let html = '';
@@ -618,7 +613,7 @@ init();
         snap.forEach(docu=>{
           const d = docu.data();
           const me = (docu.id === uid);
-          html += <div class="leader-row ${me?'leader-me':''}"><div>#${rank} ${me?'👤 You':docu.id.slice(0,6)}</div><div>${d.points||0} pts</div></div>;
+          html += `<div class="leader-row ${me?'leader-me':''}"><div>#${rank} ${me?'👤 You':docu.id.slice(0,6)}</div><div>${d.points||0} pts</div></div>`;
           rank++;
         });
         if(!html) html = '<div class="leader-row"><div>No data yet</div><div>—</div></div>';
