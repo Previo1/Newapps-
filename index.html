@@ -1,607 +1,755 @@
 <!DOCTYPE html>
 <html lang="gu">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>BYTE COIN — Auto Mining</title>
-<link rel="icon" href="coin.png" />
-<style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gujarat Recruitment Hub — Refer, Spin & Earn</title>
+  <link rel="icon" href="coin.png">
+
+  <!-- confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
   :root{
-    --bg:#061021; --card:#0f1724; --accent:#f59e0b; --muted:#94a3b8; --glass: rgba(255,255,255,0.03);
-    --success:#4caf50; --danger:#ff5252; --info:#2196f3;
+    --bg:#070707;
+    --card:#0f1314;
+    --primary:#00e6e6;
+    --accent:#ff6fbf;
+    --muted:#9aa0a6;
+    --glass: rgba(255,255,255,0.04);
+    --success:#00ffcc;
+    --danger:#ff5252;
+    --gold1: #ffe082;
+    --gold2: #ffb300;
   }
   *{box-sizing:border-box}
-  body{ margin:0; font-family:Inter, system-ui, Arial; background:linear-gradient(180deg,#061021,#07162a); color:#e6eef8; -webkit-font-smoothing:antialiased;}
-  header.appbar{
-    display:flex; align-items:center; gap:12px; padding:12px 16px; background:linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
-    border-bottom:1px solid rgba(255,255,255,0.02); position:relative;
-  }
-  .logo{ width:46px; height:46px; border-radius:50%; background:var(--glass); display:flex; align-items:center; justify-content:center; }
-  .logo img{ width:34px; height:34px; }
-  .title{ font-size:13px; font-weight:600; color:var(--muted); } /* Subtitle smaller */
-  .header-meta{ margin-left:auto; text-align:right; font-size:13px; color:var(--muted); }
-  .header-meta .pts{ color:var(--accent); font-weight:800; font-size:15px; }
-
-  /* BIG CENTER TITLE (BYTE COIN) */
-  .big-title {
-    position:absolute; left:50%; transform:translateX(-50%); top:6px;
-    font-size:24px; font-weight:900; letter-spacing:4px;
-    background:linear-gradient(90deg,#ffd26b,#ff9800,#ff6a00);
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-    text-transform:uppercase;
-    text-shadow:0 6px 18px rgba(255,152,0,0.12), 0 12px 40px rgba(0,0,0,0.6);
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: "Noto Sans Gujarati", "Inter", system-ui, Arial, sans-serif;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(0,140,140,0.06), transparent), linear-gradient(180deg,#050506,#0f1112);
+    color:#e6eef0;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
   }
 
-  main{ padding:18px; max-width:960px; margin:18px auto 120px; }
-  .card{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:14px; padding:16px; margin-bottom:14px; border:1px solid rgba(255,255,255,0.03); box-shadow: 0 10px 30px rgba(2,6,23,0.6);}
-  .big-coin{ width:160px; height:160px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; transition: transform .12s ease; border:6px solid rgba(255,255,255,0.04); box-shadow: 0 18px 60px rgba(255,160,60,0.05), inset 0 6px 18px rgba(255,255,255,0.02);}
-  .big-coin:active{ transform:scale(0.95) rotate(-6deg); }
-  .big-coin img{ width:100px; height:100px; user-select:none; -webkit-user-drag:none; }
-
-  .status h2{ margin:4px 0 6px; font-size:18px; }
-  .muted{ color:var(--muted); font-size:13px; }
-
-  /* Highlighted Coins (large & bold) */
-  #headerCoins {
-    font-size:20px; font-weight:900;
-    background:linear-gradient(90deg,#ffea9a,#ffd26b,#ffb84d);
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-    text-shadow:0 6px 18px rgba(255,160,50,0.12);
+  /* Header */
+  .header{
+    position:sticky;top:0;z-index:40;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:12px 16px;background:linear-gradient(90deg,var(--primary),#0077ff);
+    box-shadow:0 6px 24px rgba(0,0,0,0.6);
+  }
+  .app-title{font-weight:900;font-size:16px;letter-spacing:0.2px}
+  .points-pill{
+    background:linear-gradient(90deg,#ffd54f,#ff9100);color:#111;padding:6px 10px;border-radius:999px;font-weight:800;
+    box-shadow:0 8px 30px rgba(255,144,35,0.12);
+    display:flex;gap:10px;align-items:center;cursor:pointer
   }
 
-  .progress-bar{ width:100%; height:12px; background:rgba(255,255,255,0.03); border-radius:999px; overflow:hidden; margin-top:10px; }
-  .progress-fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--accent),#ffd26b); transition:width .3s ease; }
+  /* main layout */
+  .container{padding:16px;padding-bottom:130px}
 
-  .controls{ display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
-  .btn{ padding:8px 12px; border-radius:10px; border:0; cursor:pointer; font-weight:700; background:rgba(255,255,255,0.03); color:#fff; }
-  .btn.primary{ background:linear-gradient(90deg,var(--accent),#ffb84d); color:#07121b; }
-  .btn.ghost{ background:transparent; border:1px solid rgba(255,255,255,0.03); color:var(--muted); }
-
-  footer.appfooter{ position:fixed; left:0; right:0; bottom:0; display:flex; justify-content:space-around; background:linear-gradient(180deg, rgba(2,6,23,0.7), rgba(2,6,23,0.9)); padding:10px 6px; border-top:1px solid rgba(255,255,255,0.02); backdrop-filter: blur(6px);}
-  footer.appfooter button{ background:none; border:none; color:var(--muted); font-weight:700; cursor:pointer; }
-  footer.appfooter button.active{ color:var(--accent); }
-
-  input.small{ width:100%; padding:10px; border-radius:8px; background:transparent; border:1px solid rgba(255,255,255,0.03); color:#e6eef8; }
-
-  .share-row{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
-  .join-btn{ padding:10px 14px; border-radius:10px; background:#1976d2; color:#fff; border:0; font-weight:800; cursor:pointer; }
-
-  .history-item{ padding:8px 0; border-bottom:1px dashed rgba(255,255,255,0.03); font-size:13px; display:flex; justify-content:space-between; gap:8px; align-items:center;}
-  .history-item .left{max-width:78%}
-  .badge { font-weight:800; padding:6px 8px; border-radius:999px; font-size:12px; }
-  .badge.mined{ background: rgba(76,175,80,0.12); color:var(--success) }
-  .badge.withdraw{ background: rgba(255,82,82,0.08); color:var(--danger) }
-  .badge.ref{ background: rgba(245,158,11,0.08); color:var(--accent) }
-  .badge.info{ background: rgba(33,150,243,0.08); color:var(--info) }
-
-  /* Toast */
-  #toastWrap{ position:fixed; right:18px; bottom:84px; z-index:9999; display:flex; flex-direction:column; gap:8px; align-items:flex-end; max-width:320px; }
-  .toast { padding:10px 14px; border-radius:10px; background:rgba(20,24,32,0.95); color:#fff; box-shadow:0 6px 24px rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.03); font-weight:700; }
-  .toast.success{ border-left:4px solid var(--success) }
-  .toast.info{ border-left:4px solid var(--info) }
-  .toast.warn{ border-left:4px solid var(--accent) }
-  .toast.error{ border-left:4px solid var(--danger) }
-
-  /* Glow pulse */
-  .pulse { animation: pulseAnim 0.6s ease; }
-  @keyframes pulseAnim { 0% { transform: scale(1); } 50% { transform: scale(1.12);} 100% { transform: scale(1);} }
-
-  @media (max-width:520px){
-    .big-coin{ width:130px; height:130px } 
-    .big-coin img{ width:80px;height:80px } 
-    .big-title{font-size:18px; top:8px} 
-    #headerCoins{font-size:18px}
-    #toastWrap{ left:12px; right:auto; align-items:flex-start;}
+  /* cards grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+  .card{
+    background:var(--card);padding:12px;border-radius:12px;text-align:center;cursor:pointer;
+    box-shadow:0 6px 20px rgba(0,0,0,0.6);transition:transform .18s,box-shadow .18s,background .18s;
+    border:1px solid rgba(255,255,255,0.02);
   }
-</style>
+  .card:hover{transform:translateY(-6px) scale(1.02); box-shadow:0 12px 34px rgba(0,230,230,0.06); border-color:rgba(0,230,230,0.06)}
+  .card .icon{font-size:22px;margin-bottom:8px;color:var(--primary)}
+
+  /* refer box */
+  .refer-box{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03); box-shadow:0 6px 20px rgba(0,0,0,0.6)}
+  .small{color:var(--muted);font-size:13px}
+
+  /* buttons */
+  .btn{border:none;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:800}
+  .btn.primary{background:linear-gradient(90deg,var(--primary),#00a6ff);color:#001;text-shadow:0 1px 0 rgba(255,255,255,0.02);box-shadow:0 8px 24px rgba(0,170,255,0.12)}
+  .btn.ghost{background:rgba(255,255,255,0.03);color:#e6eef0}
+  .btn.warn{background:rgba(255,82,82,0.15);color:#ffd3d3;border:1px solid rgba(255,82,82,0.25)}
+
+  /* footer nav */
+  .footer{position:fixed;left:0;right:0;bottom:0;height:92px;background:rgba(2,6,8,0.88);display:flex;align-items:center;justify-content:space-around;border-top:1px solid rgba(255,255,255,0.02);backdrop-filter:blur(8px);z-index:50}
+  .nav-btn{background:none;border:none;color:var(--muted);font-weight:700;display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px;cursor:pointer}
+  .nav-btn.active{color:var(--primary);transform:translateY(-2px)}
+
+  /* quiz */
+  .quiz-q{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.02)}
+  .opt{padding:10px;border-radius:10px;margin:8px 0;background:rgba(255,255,255,0.02);cursor:pointer;border:1px solid rgba(255,255,255,0.02)}
+  .opt.correct{background:rgba(0,255,204,0.12);border-color:rgba(0,255,204,0.25)}
+  .opt.wrong{background:rgba(255,80,80,0.08);border-color:rgba(255,80,80,0.25)}
+
+  /* game */
+  .game-box{background:var(--card);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);text-align:center}
+  .coin{width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 35% 35%, var(--gold1), var(--gold2) 60%, #ff8f00);display:grid;place-items:center;font-size:28px;margin:12px auto;box-shadow:0 8px 28px rgba(255,160,0,0.14);cursor:pointer;user-select:none;transition:transform .06s}
+
+  /* toast */
+  .toast{position:fixed;left:50%;transform:translateX(-50%);top:92px;background:#0b1112;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);display:none;z-index:200}
+
+  /* helper */
+  .hint{font-size:13px;color:var(--muted);margin-top:8px}
+  .center{display:flex;align-items:center;justify-content:center}
+
+  /* leaderboard */
+  .leader-row{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:10px;border-bottom:1px solid rgba(255,255,255,0.03)}
+  .leader-me{background:linear-gradient(90deg, rgba(0,230,230,0.04), rgba(124,77,255,0.03))}
+  .avatar{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.03);display:inline-grid;place-items:center;font-weight:800;margin-right:8px}
+
+  /* modal */
+  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:120}
+  .modal .box{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:16px;min-width:320px;max-width:94vw;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
+  .modal .box h3{margin:0 0 8px 0}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.06);padding:4px 8px;border-radius:999px;font-size:12px}
+
+  /* spin wheel */
+  #wheel-wrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  #wheel{width:180px;height:180px;border-radius:50%;background:conic-gradient(#00e6e6 0 45deg,#7c4dff 45deg 90deg,#ff6fbf 90deg 135deg,#ffd54f 135deg 180deg,#66bb6a 180deg 225deg,#29b6f6 225deg 270deg,#ef5350 270deg 315deg,#ab47bc 315deg 360deg);box-shadow:0 12px 40px rgba(0,0,0,.4);position:relative;transition:transform 4s cubic-bezier(.25,.9,.25,1)}
+  #pointer{position:absolute;left:50%;transform:translateX(-50%);top:-8px;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:18px solid #fff;border-radius:2px}
+
+  /* progress bar */
+  .progress{height:12px;background:rgba(255,255,255,0.04);border-radius:999px;overflow:hidden}
+  .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--primary),#00a6ff);transition:width .4s}
+
+  /* responsive */
+  @media (max-width:420px){.header{padding:10px}.container{padding:12px}.coin{width:94px;height:94px}}
+  </style>
 </head>
 <body>
 
-<header class="appbar">
-  <div class="logo"><img src="coin.png" alt="bytecoin" /></div>
-  <div style="display:flex;flex-direction:column;">
-    <div class="title">Auto Mining</div>
+<!-- Header -->
+<div class="header">
+  <div class="app-title">Gujarat Recruitment Hub</div>
+  <div class="points-pill" title="Open Wallet" onclick="openWallet()">
+    <div id="pointsAnimated" style="min-width:72px;text-align:center">0 pts</div>
   </div>
-  <div class="big-title">BYTE COIN</div>
-  <div class="header-meta">
-    <div>Points: <span id="headerPoints" class="pts">0</span> pts</div>
-    <div>Coins: <span id="headerCoins">0</span> ₿</div>
-  </div>
-</header>
+</div>
 
-<main>
-  <!-- HOME -->
-  <section id="page-home" class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
-      <div>
-        <div class="muted">Total Supply</div>
-        <div style="font-weight:800;font-size:18px">22,000,000 ₿</div>
-      </div>
-      <div style="text-align:right">
-        <div class="muted">Referral reward (both)</div>
-        <div style="font-weight:800;font-size:18px">+100 ₿ each</div>
-      </div>
+<!-- Main -->
+<div class="container">
+
+  <!-- Recruitment -->
+  <div id="page-sites" class="page active">
+    <h3>Recruitment Sites</h3>
+    <p class="small">Official portals — opens inside Telegram if available.</p>
+    <div class="grid" id="sitesGrid"></div>
+  </div>
+
+  <!-- Mock Test -->
+  <div id="page-quiz" class="page" style="display:none">
+    <h3>Mock Test (Sample)</h3>
+    <div id="quizContainer"></div>
+    <div style="display:flex;gap:8px;justify-content:space-between;align-items:center;margin-top:8px">
+      <div class="small">Try a random 2-question mini test</div>
+      <button class="btn ghost" onclick="renderQuiz(true)">Shuffle</button>
     </div>
+  </div>
 
-    <div class="mine-row" style="margin-top:14px; display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
-      <div class="big-coin center" id="bigCoinBtn" title="Tap to get +1 point">
-        <img src="coin.png" alt="coin">
+  <!-- Updates + Leaderboard -->
+  <div id="page-updates" class="page" style="display:none">
+    <h3>Updates</h3>
+    <div id="updatesList"></div>
+    <p class="hint" id="lastSync"></p>
+
+    <h3 style="margin-top:18px">🏆 Leaderboard (Top 10)</h3>
+    <div id="leaderboard" class="card" style="padding:0"></div>
+  </div>
+
+  <!-- Refer -->
+  <div id="page-refer" class="page" style="display:none">
+    <h3>Refer & Earn</h3>
+    <div class="refer-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+        <div>
+          <div class="small">તમારો Referral Code</div>
+          <div style="font-weight:900;font-size:20px" id="myRef">--</div>
+          <div class="small" style="margin-top:6px">Referral Link: <span id="myRefLink">—</span></div>
+        </div>
+        <div style="text-align:right">
+          <div class="small">તમારા પોઇન્ટ્સ</div>
+          <div id="pointsSmall" style="font-weight:900;font-size:18px">0</div>
+        </div>
       </div>
 
-      <div style="flex:1; min-width:240px;">
-        <div class="status">
-          <h2>Auto Mining: <span id="mineState">Stopped</span></h2>
-          <div class="muted">Speed: <b id="mineSpeed">1 min/point</b> • Next point in <span id="nextTick">--:--</span></div>
-        </div>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn ghost" onclick="shareWhatsapp()">WhatsApp</button>
+        <button class="btn ghost" onclick="shareTelegram()">Telegram</button>
+        <button class="btn ghost" onclick="copyLink()">Copy Link</button>
+        <button class="btn ghost" onclick="openLink('https://t.me/gujarat_web')">Telegram Group</button>
+      </div>
 
-        <div style="margin-top:10px;">
-          <div style="display:flex;justify-content:space-between;font-size:13px;">
-            <div class="muted">Points: <b id="pointsDisplay">0</b> / 100</div>
-            <div class="muted">Coins: <b id="coinsDisplay">0</b></div>
+      <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)">
+
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <button class="btn primary" onclick="openChannel()">📌 Join Channel & Earn 1000 pts</button>
+        <div class="small">Join ચેનલ: <a href="https://t.me/granthnirman" target="_blank" style="color:var(--primary)">https://t.me/granthnirman</a></div>
+      </div>
+
+      <p class="hint">નોંધ: Join કર્યા પછી local browser માં એકવાર જ 1000 પોઇન્ટ આપ્યા જશે. For real cross-device credits, Firebase enabled.</p>
+    </div>
+  </div>
+
+  <!-- Game -->
+  <div id="page-game" class="page" style="display:none">
+    <h3>Tap the Coin (Earn)</h3>
+    <div class="game-box">
+      <div id="coin" class="coin">🪙</div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:8px">
+        <button class="btn primary" onclick="startGame()">Start 15s Round</button>
+        <button class="btn ghost" onclick="resetGameDaily()">Reset Daily (dev)</button>
+      </div>
+      <p class="hint">Daily game limit: <span id="gameEarned">0</span> / <span id="GAME_LIMIT">50</span> pts</p>
+      <div class="progress" style="margin-top:8px"><i id="gameProgress"></i></div>
+      <p class="hint">Round time left: <span id="timeLeft">0</span>s</p>
+    </div>
+  </div>
+
+
+  <!-- Spin -->
+  <div id="page-spin" class="page" style="display:none">
+    <h3>🎡 Daily Spin</h3>
+    <div class="card" style="padding:18px">
+      <div id="wheel-wrap">
+        <div style="position:relative">
+          <div id="pointer"></div>
+          <div id="wheel"></div>
+        </div>
+        <div>
+          <div class="chips" style="margin-bottom:10px">
+            <span class="chip">5 pts</span>
+            <span class="chip">8 pts</span>
+            <span class="chip">10 pts</span>
+            <span class="chip">12 pts</span>
+            <span class="chip">15 pts</span>
+            <span class="chip">20 pts</span>
           </div>
-          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-        </div>
-
-        <div class="controls">
-          <button class="btn primary" id="toggleMine">Start Auto-Mining</button>
-          <button class="btn ghost" id="instantTap">Instant +1</button>
-          <button class="btn" id="settingsBtn">Options</button>
-        </div>
-        <div class="small-note">Tip: Continuous mining works when the tab/app is open. Offline catch-up credited on return.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- REFERRAL -->
-  <section id="page-referral" class="card" style="display:none">
-    <h3>Referral & Channel</h3>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;">
-      <div style="flex:1;min-width:240px">
-        <div style="font-weight:700">Your Referral Link</div>
-        <input id="refInput" class="small" readonly style="margin-top:8px"/>
-        <div class="share-row">
-          <button class="share-btn tg btn" id="shareTG" style="background:#0088cc;color:#fff">Share to Telegram</button>
-          <button class="share-btn wa btn" id="shareWA" style="background:#25D366;color:#07121b">Share to WhatsApp</button>
-          <button class="btn" id="copyRef">Copy</button>
-        </div>
-        <div class="small-note">When a new user opens your referral link they receive +100 ₿ immediately and a claim-code is generated for referrer.</div>
-      </div>
-
-      <div style="flex:1;min-width:240px">
-        <div style="font-weight:700">Join Channel</div>
-        <div class="small-note">Click join and you'll receive <b>+500 ₿</b>. (In real app: server-side verification recommended.)</div>
-        <div style="margin-top:10px;">
-          <a id="channelLink" class="join-btn" href="https://t.me/bytecoinS22m" target="_blank">Join Channel</a>
-          <div style="margin-top:8px"><button class="btn" id="claimChannelBtn">Claim Channel Bonus</button></div>
-        </div>
-
-        <div style="margin-top:16px;">
-          <div style="font-weight:700">Redeem Claim Code</div>
-          <input id="redeemCodeInput" class="small" placeholder="Paste claim code here" style="margin-top:8px"/>
-          <div style="margin-top:8px"><button class="btn primary" id="redeemBtn">Redeem +100 ₿</button></div>
+          <button id="spinNow" class="btn primary">Spin Now</button>
+          <button id="resetSpinDev" class="btn ghost" style="margin-left:8px">Reset (dev)</button>
+          <p class="hint" id="spinHint">You can spin once per day.</p>
+          <p class="hint">Last spin: <span id="lastSpinTxt">—</span></p>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- WALLET -->
-  <section id="page-wallet" class="card" style="display:none">
-    <h3>Wallet</h3>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;">
-      <div style="flex:1;min-width:180px;">
-        <div class="muted">Total Coins</div>
-        <div style="font-weight:900;font-size:22px" id="walletCoins">0</div>
-      </div>
-      <div style="flex:1;min-width:180px;">
-        <div class="muted">Total Points</div>
-        <div style="font-weight:800;font-size:20px" id="walletPoints">0</div>
-      </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <button class="nav-btn active" onclick="goto('page-sites', this)"><div>🏢</div><div>Sites</div></button>
+  <button class="nav-btn" onclick="goto('page-quiz', this)"><div>📝</div><div>Mock</div></button>
+  <button class="nav-btn" onclick="goto('page-updates', this)"><div>🔔</div><div>Updates</div></button>
+  <button class="nav-btn" onclick="goto('page-refer', this)"><div>🤝</div><div>Refer</div></button>
+  <button class="nav-btn" onclick="goto('page-spin', this)"><div>🎡</div><div>Spin</div></button>
+  <button class="nav-btn" onclick="goto('page-game', this)"><div>🎮</div><div>Game</div></button>
+</div>
+
+<!-- toast -->
+<div id="toast" class="toast"></div>
+
+<!-- Wallet Modal -->
+<div id="walletModal" class="modal">
+  <div class="box">
+    <h3>💳 Wallet Balance</h3>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div class="small">Total Points</div>
+      <div style="font-weight:900" id="walletBalance">0</div>
     </div>
-
-    <!-- Withdraw section -->
-    <div class="card" style="margin-top:14px;">
-      <h4>Withdraw Coins</h4>
-      <div class="muted">અહીંથી તમારા ByteCoin (સ્થાનીય ડેમો) withdraw કરો</div>
-      <div class="withdraw-row" style="margin-top:10px; display:flex; gap:8px; align-items:center;">
-        <input id="withdrawAmount" class="small" type="number" min="1" placeholder="Amount (₿)" />
-        <input id="withdrawTo" class="small" type="text" placeholder="Recipient User ID" />
-      </div>
-      <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
-        <button class="btn primary" id="withdrawBtn">Withdraw</button>
-        <button class="btn" id="withdrawDemoBtn">Demo Withdraw (show)</button>
-      </div>
-      <div class="small-note">Note: This is a local/demo withdraw — real transfers need a backend & blockchain.</div>
+    <div style="margin-top:10px" class="small">Recent (local) history</div>
+    <div id="txnList" style="max-height:180px;overflow:auto;margin-top:6px;border-top:1px solid rgba(255,255,255,0.06)"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+      <button class="btn ghost" onclick="closeWallet()">Close</button>
+      <button class="btn warn" onclick="clearLocal()">Clear Local</button>
     </div>
-
-    <h4 style="margin-top:12px">History</h4>
-    <div id="historyBox" style="max-height:260px; overflow:auto; margin-top:6px"></div>
-  </section>
-
-  <!-- PROFILE -->
-  <section id="page-profile" class="card" style="display:none">
-    <h3>Profile</h3>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;">
-      <div style="flex:1;min-width:180px;">
-        <div class="muted">Telegram ID</div>
-        <div id="profileTelegram" style="font-weight:800">—</div>
-      </div>
-      <div style="flex:1;min-width:180px;">
-        <div class="muted">User ID</div>
-        <div id="profileUser" style="font-weight:800">—</div>
-      </div>
-    </div>
-
-    <div style="margin-top:12px" class="muted">
-      <div style="font-weight:700">Mining details</div>
-      <ul style="margin-top:8px">
-        <li>1 minute = 1 point (Auto-Mining when ON)</li>
-        <li>100 points = 1 ByteCoin (auto-convert)</li>
-        <li>Referral: referee +100 instantly; referrer redeems via claim code or one-tap claim link</li>
-        <li>Channel join click → +500 ByteCoin (click-based credit)</li>
-      </ul>
-    </div>
-  </section>
-</main>
-
-<footer class="appfooter">
-  <button id="menuHome" class="active">Home</button>
-  <button id="menuReferral">Referral</button>
-  <button id="menuWallet">Wallet</button>
-  <button id="menuProfile">Profile</button>
-</footer>
-
-<!-- Toast container -->
-<div id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+  </div>
+</div>
 
 <script>
-/* ------------------------
-  Keys & init
--------------------------*/
-const KEY = {
-  uid: 'bc_userId',
-  tg: 'bc_tgId',
-  pts: 'bc_points',
-  cns: 'bc_coins',
-  hist: 'bc_history',
-  refUsed: 'bc_refUsed',
-  outgoingClaim: 'bc_outClaim',
-  claimedCodes: 'bc_claimedCodes',
-  channelBonus: 'bc_channelBonus',
-  minerOn: 'bc_minerOn'
-};
+/* ------------------ CONFIG & KEYS ------------------ */
+const KEY_POINTS = 'grh_points_v3';
+const KEY_REF = 'grh_ref_v3';
+const KEY_JOINED_CHANNEL = 'grh_joined_channel_v3';
+const KEY_LAST_LOGIN = 'grh_last_login_v3';
+const KEY_GAME_DAY = 'grh_game_day_v3';
+const KEY_GAME_EARNED = 'grh_game_earned_v3';
+const KEY_LAST_SPIN = 'grh_last_spin_v2';
+const KEY_TXN_HISTORY = 'grh_txn_history_v2';
 
-function now(){ return new Date().toLocaleString(); }
-function randCode(){ return 'BC' + Math.random().toString(36).slice(2,9).toUpperCase(); }
+const DAILY_LOGIN_BONUS = 5;
+const GAME_DAILY_LIMIT = 50;
+const GAME_ROUND_SECONDS = 15;
 
-/* --- Toast helper --- */
-const toastWrap = document.getElementById('toastWrap');
-function showToast(msg, type='info', ttl=3500){
-  const t = document.createElement('div');
-  t.className = 'toast ' + (type || 'info');
-  t.innerText = msg;
-  toastWrap.appendChild(t);
-  setTimeout(()=> { t.classList.add('fade'); }, 20);
-  setTimeout(()=> { t.style.opacity='0'; t.style.transform='translateY(8px)'; }, ttl);
-  setTimeout(()=> { try{ toastWrap.removeChild(t); }catch(e){} }, ttl+500);
+/* ------------------ HELPERS ------------------ */
+const $ = sel => document.querySelector(sel);
+function showToast(msg, ms=1600){
+  const t = $('#toast'); t.textContent = msg; t.style.display='block';
+  setTimeout(()=> t.style.display='none', ms);
+}
+function todayKey(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function pushTxn(text){
+  const arr = JSON.parse(localStorage.getItem(KEY_TXN_HISTORY)||'[]');
+  arr.unshift({ t: new Date().toISOString(), text });
+  localStorage.setItem(KEY_TXN_HISTORY, JSON.stringify(arr.slice(0,40)));
+}
+function renderTxns(){
+  const box = $('#txnList');
+  const arr = JSON.parse(localStorage.getItem(KEY_TXN_HISTORY)||'[]');
+  box.innerHTML = arr.length? arr.map(x=>`<div class="leader-row" style="border:none"><div class="small">${new Date(x.t).toLocaleString()}</div><div>${x.text}</div></div>`).join('') : '<div class="small">No local history</div>';
 }
 
-/* --- Pulse Animation Helper --- */
-function pulse(el){
-  if(!el) return;
-  el.classList.add('pulse');
-  setTimeout(()=> el.classList.remove('pulse'), 600);
-}
+/* ------------------ POINTS (animated) ------------------ */
+function getPoints(){ return Number(localStorage.getItem(KEY_POINTS) || 0); }
+function setPoints(n){ localStorage.setItem(KEY_POINTS, String(n)); updatePointsDisplay(); if($('#walletBalance')) $('#walletBalance').textContent = n; }
 
-/* user */
-let userId = localStorage.getItem(KEY.uid);
-if(!userId){ userId = 'user_' + Math.floor(Math.random()*900000+100000); localStorage.setItem(KEY.uid, userId); }
-document.getElementById('profileUser').innerText = userId;
-
-/* optional telegram id from query */
-const params = new URLSearchParams(window.location.search);
-const tgParam = params.get('tg_id') || params.get('tgid') || params.get('telegram_id') || null;
-if(tgParam) localStorage.setItem(KEY.tg, tgParam);
-const tgId = localStorage.getItem(KEY.tg) || '—';
-document.getElementById('profileTelegram').innerText = tgId;
-
-/* points/coins/history */
-let points = parseInt(localStorage.getItem(KEY.pts) || '0',10);
-let coins = parseInt(localStorage.getItem(KEY.cns) || '0',10);
-let history = JSON.parse(localStorage.getItem(KEY.hist) || '[]');
-let claimedCodes = JSON.parse(localStorage.getItem(KEY.claimedCodes) || '[]');
-
-/* ui refs */
-const headerPoints = document.getElementById('headerPoints');
-const headerCoins = document.getElementById('headerCoins');
-const pointsDisplay = document.getElementById('pointsDisplay');
-const coinsDisplay = document.getElementById('coinsDisplay');
-const walletPoints = document.getElementById('walletPoints');
-const walletCoins = document.getElementById('walletCoins');
-const progressFill = document.getElementById('progressFill');
-const historyBox = document.getElementById('historyBox');
-const refInput = document.getElementById('refInput');
-const withdrawAmountEl = document.getElementById('withdrawAmount');
-
-/* mining vars */
-const POINTS_PER_COIN = 100;
-const MS_PER_POINT = 60_000; // 1 min
-let minerInterval = null;
-let lastTickAt = Date.now();
-
-/* render */
-function renderAll(){
-  headerPoints.innerText = points;
-  headerCoins.innerText = coins;
-  pointsDisplay && (pointsDisplay.innerText = points);
-  coinsDisplay && (coinsDisplay.innerText = coins);
-  walletPoints.innerText = points;
-  walletCoins.innerText = coins;
-  const percent = Math.min(100, Math.floor((points/POINTS_PER_COIN)*100));
-  progressFill && (progressFill.style.width = percent + '%');
-  // history
-  historyBox.innerHTML = history.slice().reverse().map(h => {
-    const cls = h.type ? `badge ${h.type}` : 'badge info';
-    // left text and right time+badge
-    return `<div class="history-item"><div class="left"><div>${h.msg}</div><div class="muted" style="margin-top:6px">${h.time}</div></div><div class="right"><div class="${cls}">${h.label || h.type || 'info'}</div></div></div>`;
-  }).join('');
-  // referral input
-  refInput && (refInput.value = window.location.origin + window.location.pathname + '?ref=' + userId);
-  // withdraw max
-  try{
-    withdrawAmountEl && withdrawAmountEl.setAttribute('max', String(coins));
-  }catch(e){}
-}
-
-/* save/load */
-function saveAll(){
-  localStorage.setItem(KEY.pts, String(points));
-  localStorage.setItem(KEY.cns, String(coins));
-  localStorage.setItem(KEY.hist, JSON.stringify(history));
-  localStorage.setItem(KEY.claimedCodes, JSON.stringify(claimedCodes));
-}
-function addHistory(msg, type='info', label=''){
-  history.push({msg, time: now(), type, label});
-  if(history.length>300) history.shift();
-  saveAll(); renderAll();
-}
-
-/* --- addPoint with animation --- */
-function addPoint(n=1, reason=''){
-  points += n;
-  addHistory(`${reason}`, 'mined', `+${n} pts`);
-  // convert
-  if(points >= POINTS_PER_COIN){
-    const g = Math.floor(points / POINTS_PER_COIN);
-    coins += g;
-    points = points % POINTS_PER_COIN;
-    addHistory(`Converted ${g*POINTS_PER_COIN} pts → ${g} ₿`, 'ref', `${g} ₿`);
-    pulse(headerCoins); // coins pulse
+async function addPoints(n, note){
+  if(window.FIREBASE_READY && window.currentUserId){
+    const to = await addPointsFirebase(n);
+    if(note) pushTxn(`${note} +${n}`);
+    animatePoints(Number($('#pointsAnimated').dataset.val||0), to);
+    return to;
+  } else {
+    if(note) pushTxn(`${note} +${n}`);
+    return addPointsLocal(n);
   }
-  saveAll(); renderAll();
-  pulse(headerPoints); // points pulse
 }
-
-/* instant tap and big coin */
-document.getElementById('instantTap').addEventListener('click', ()=> { addPoint(1, 'Instant tap'); showToast('+1 point (tap)', 'success'); });
-document.getElementById('bigCoinBtn').addEventListener('click', ()=> { addPoint(1, 'Tap'); showToast('+1 point (tap)', 'success'); });
-
-/* miner start/stop */
-const toggleBtn = document.getElementById('toggleMine');
-const mineStateEl = document.getElementById('mineState');
-const nextTickEl = document.getElementById('nextTick');
-document.getElementById('mineSpeed').innerText = '1 min/point';
-
-function startMiner(){
-  if(minerInterval) return;
-  minerInterval = setInterval(()=> { addPoint(1, 'Auto-mined'); lastTickAt = Date.now(); }, MS_PER_POINT);
-  lastTickAt = Date.now();
-  toggleBtn.innerText = 'Stop Auto-Mining';
-  mineStateEl.innerText = 'Running';
-  localStorage.setItem(KEY.minerOn, '1');
-  addHistory('Auto-miner started', 'info', 'miner');
-  showToast('Auto-mining started', 'info');
+function addPointsLocal(n){
+  const from = getPoints();
+  const to = from + n;
+  localStorage.setItem(KEY_POINTS, String(to));
+  animatePoints(from, to);
+  if($('#walletBalance')) $('#walletBalance').textContent = to;
+  return to;
 }
-function stopMiner(){
-  if(!minerInterval) return;
-  clearInterval(minerInterval);
-  minerInterval = null;
-  toggleBtn.innerText = 'Start Auto-Mining';
-  mineStateEl.innerText = 'Stopped';
-  localStorage.setItem(KEY.minerOn, '0');
-  addHistory('Auto-miner stopped', 'info', 'stopped');
-  showToast('Auto-mining stopped', 'warn');
-}
-toggleBtn.addEventListener('click', ()=> { if(minerInterval) stopMiner(); else startMiner(); });
-
-/* tick UI */
-setInterval(()=>{
-  if(minerInterval){
-    const elapsed = Date.now() - lastTickAt;
-    const left = Math.max(0, MS_PER_POINT - elapsed);
-    const mm = Math.floor(left/60000); const ss = Math.floor((left%60000)/1000);
-    nextTickEl.innerText = `${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
-  } else nextTickEl.innerText = '--:--';
-}, 500);
-
-/* Referral flow (serverless-friendly) */
-(function handleIncomingReferralOrClaim(){
-  const params = new URLSearchParams(window.location.search);
-  const ref = params.get('ref');
-  const claim = params.get('claim');
-
-  if(ref && ref !== userId && !localStorage.getItem(KEY.refUsed)){
-    // Give referee +100 coins immediately
-    coins += 100;
-    addHistory(`Referral bonus: +100 ₿ (referee of ${ref})`, 'ref', '+100 ₿');
-    // create outgoing claim code for referrer
-    const code = randCode();
-    const out = { code, from: userId, to: ref, at: new Date().toISOString() };
-    localStorage.setItem(KEY.outgoingClaim, JSON.stringify(out));
-    localStorage.setItem(KEY.refUsed, JSON.stringify({from:ref, at: new Date().toISOString()}));
-    saveAll(); renderAll();
-    showToast('Referral applied — you received +100 ₿. Claim code created.', 'success', 5000);
-    // append claim box to referral page (if user stays)
-    setTimeout(()=> renderOutgoingClaim(), 300);
+function animatePoints(from, to){
+  const el = $('#pointsAnimated');
+  const small = $('#pointsSmall');
+  const duration = 600;
+  const start = performance.now();
+  function step(now){
+    const t = Math.min(1, (now - start)/duration);
+    const val = Math.round(from + (to - from) * (1 - Math.pow(1 - t, 3)));
+    el.textContent = val + ' pts';
+    el.dataset.val = val;
+    if(small) small.textContent = val;
+    if(t < 1) requestAnimationFrame(step);
   }
+  requestAnimationFrame(step);
+}
+function updatePointsDisplay(){
+  const v = getPoints();
+  $('#pointsAnimated').textContent = v + ' pts';
+  $('#pointsAnimated').dataset.val = v;
+  if($('#pointsSmall')) $('#pointsSmall').textContent = v;
+  if($('#walletBalance')) $('#walletBalance').textContent = v;
+}
 
-  // If someone opens with ?claim=CODE we auto-redeem for them
-  if(claim){
-    tryRedeemCode(claim);
+/* ------------------ NAV ------------------ */
+function goto(pageId, btn){
+  document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+  document.getElementById(pageId).style.display = 'block';
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+/* ------------------ SITES ------------------ */
+const sites = [
+  {name:'OJAS', url:'https://ojas.gujarat.gov.in', icon:'🗂️'},
+  {name:'GPRB', url:'https://gprb.gujarat.gov.in', icon:'👮'},
+  {name:'GSSSB', url:'https://gsssb.gujarat.gov.in', icon:'📋'},
+  {name:'GPSSB', url:'https://gpssb.gujarat.gov.in', icon:'👳'},
+  {name:'GPSC', url:'https://gpsc.gujarat.gov.in', icon:'🏛️'},
+  {name:'GPSC-OJAS', url:'https://gpsc-ojas.gujarat.gov.in', icon:'📝'}
+];
+function openLink(url){
+  if(window.Telegram?.WebApp){ Telegram.WebApp.openLink(url); }
+  else { window.open(url, '_blank'); }
+}
+function renderSites(){
+  const grid = document.getElementById('sitesGrid');
+  grid.innerHTML = '';
+  sites.forEach(s=>{
+    const d = document.createElement('div');
+    d.className = 'card';
+    d.innerHTML = `<div class="icon">${s.icon}</div><div style="font-weight:800">${s.name}</div><div class="small" style="margin-top:6px">${s.url.replace(/^https?:\/\//,'')}</div>`;
+    d.onclick = ()=> openLink(s.url);
+    grid.appendChild(d);
+  });
+}
+
+/* ------------------ QUIZ ------------------ */
+const quiz = [
+  {q: "ભારતના પ્રથમ વડાપ્રધાન કોણ હતા?", opts:["સરદાર પટેલ","મહાત્મા ગાંધી","જવાહરલાલ નેહરુ","લાલ બહાદુર શાસ્ત્રી"], ans:"જવાહરલાલ નેહરુ"},
+  {q: "ગુજરાતની રાજધાની કઈ છે?", opts:["અમદાવાદ","ગાંધીનગર","વડોદરા","સુરત"], ans:"ગાંધીનગર"},
+  {q: "ભારતનું રાષ્ટ્રીય પ્રાણી કયું છે?", opts:["સિંહ","હાથી","બાઘ","દેવા"], ans:"બાઘ"}
+];
+function shuffleArray(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]] } return a }
+function renderQuiz(shuffle=false){
+  const c = $('#quizContainer'); c.innerHTML='';
+  let qset = quiz.slice();
+  if(shuffle) qset = shuffleArray(qset);
+  qset.slice(0,3).forEach(item=>{ // show up to 3
+    const box = document.createElement('div'); box.className='quiz-q';
+    const qh = document.createElement('div'); qh.style.fontWeight='800'; qh.style.marginBottom='8px'; qh.textContent = item.q;
+    box.appendChild(qh);
+    const opts = shuffleArray(item.opts.slice());
+    opts.forEach(opt=>{
+      const o = document.createElement('div'); o.className='opt'; o.textContent = opt;
+      o.onclick = ()=>{
+        if(o.dataset.locked) return;
+        box.querySelectorAll('.opt').forEach(x=> x.dataset.locked = 1);
+        if(opt === item.ans){ o.classList.add('correct'); addPoints(2, 'Quiz'); showToast('+2 pts'); }
+        else { o.classList.add('wrong'); }
+      };
+      box.appendChild(o);
+    });
+    c.appendChild(box);
+  });
+}
+
+/* ------------------ UPDATES (demo) ------------------ */
+const updates = [
+  {id:'u1', text:'OJAS: નવી ભરતી જાહેરાત', time:'2025-08-12T10:30:00+05:30'},
+  {id:'u2', text:'GPRB: Physical test date update', time:'2025-08-13T09:00:00+05:30'}
+];
+function renderUpdates(){
+  const ul = $('#updatesList'); ul.innerHTML='';
+  updates.sort((a,b)=> new Date(b.time)-new Date(a.time)).forEach(u=>{
+    const c = document.createElement('div'); c.className='card';
+    c.innerHTML = `<div style="font-weight:800">${u.text}</div><div class="small" style="margin-top:6px">${new Date(u.time).toLocaleString()}</div>`;
+    ul.appendChild(c);
+  });
+  $('#lastSync').textContent = 'Last sync: ' + new Date().toLocaleTimeString();
+}
+
+/* ------------------ REFERRAL & SHARE ------------------ */
+function ensureRef(){
+  if(window.currentUserId){
+    $('#myRef').textContent = window.currentUserId;
+    const link = buildRefLink(window.currentUserId);
+    $('#myRefLink').textContent = link;
+    return window.currentUserId;
+  }
+  let code = localStorage.getItem(KEY_REF);
+  if(!code){ code = 'GUJ' + Math.random().toString(36).slice(2,7).toUpperCase(); localStorage.setItem(KEY_REF, code); }
+  $('#myRef').textContent = code;
+  const link = buildRefLink(code);
+  $('#myRefLink').textContent = link;
+  return code;
+}
+function buildRefLink(code){ return location.origin + location.pathname + '?ref=' + encodeURIComponent(code); }
+function copyLink(){ const link = buildRefLink(ensureRef()); navigator.clipboard.writeText(link).then(()=> showToast('Referral link copied')); }
+function shareWhatsapp(){ const link = buildRefLink(ensureRef()); const msg = encodeURIComponent(`Gujarat Recruitment Hub — Refer & Earn\nJoin: ${link}`); window.open('https://wa.me/?text='+msg, '_blank'); }
+function shareTelegram(){ const link = buildRefLink(ensureRef()); const text = encodeURIComponent('Gujarat Recruitment Hub — Refer & Earn'); window.open('https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+text, '_blank'); }
+
+// Handle incoming ?ref= (local demo)
+(function handleIncomingRefLocal(){
+  const p = new URLSearchParams(window.location.search);
+  const incoming = p.get('ref');
+  if(!incoming) return;
+  const myCode = localStorage.getItem(KEY_REF);
+  if(incoming && incoming !== myCode){
+    const joinKey = 'grh_joined_via_' + incoming;
+    if(!localStorage.getItem(joinKey)){
+      addPointsLocal(10); // local joiner bonus if Firebase not ready
+      localStorage.setItem(joinKey, '1');
+      pushTxn('Referral join bonus +10');
+      showToast('Joined via referral — +10 pts');
+    }
   }
 })();
 
-/* render outgoing claim box */
-function renderOutgoingClaim(){
-  const raw = localStorage.getItem(KEY.outgoingClaim);
-  if(!raw) return;
-  const o = JSON.parse(raw);
-  // build UI element (if not exists)
-  if(!document.getElementById('outClaimBox')){
-    const box = document.createElement('div');
-    box.id = 'outClaimBox';
-    box.style.marginTop = '12px';
-    box.innerHTML = `<div style="font-weight:700">Your Claim Code</div>
-      <div class="muted">Send this code to the person who referred you on Telegram</div>
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <input id="outClaimInput" class="small" value="${o.code}" readonly/>
-        <button class="btn" id="copyOutClaim">Copy</button>
-      </div>`;
-    document.getElementById('page-referral').appendChild(box);
-    document.getElementById('copyOutClaim').addEventListener('click', ()=> {
-      navigator.clipboard.writeText(o.code).then(()=> showToast('Claim code copied', 'info')).catch(()=> showToast('Copy failed', 'error'));
-    });
+/* ------------------ Join Channel -> 1000 pts + confetti (improved) ------------------ */
+function openChannel(){
+  const url = 'https://t.me/granthnirman';
+  openLink(url);
+  const key = KEY_JOINED_CHANNEL;
+  if(!localStorage.getItem(key) && !(window.FIREBASE_READY && localStorage.getItem(key+'-server'))){
+    // prefer Firebase verification if available
+    addPoints(1000, 'Channel Join');
+    localStorage.setItem(key, '1');
+    if(window.FIREBASE_READY && window.currentUserId){ localStorage.setItem(key+'-server', '1'); }
+    showToast('+1000 pts — Welcome!');
+    confetti({ particleCount: 160, spread: 120, origin: { y: 0.6 }, colors: ['#ff6fbf','#00e6e6','#ffd54f','#7c4dff','#66bb6a'] });
+    confetti({ particleCount: 60, spread: 40, origin: { y: 0.35 } });
   } else {
-    document.getElementById('outClaimInput').value = o.code;
+    showToast('તમે પહેલેથી જ 1000 પોઇન્ટ લઈ ચૂકયા છો');
   }
 }
 
-/* Redeem code for referrer */
-function tryRedeemCode(code){
-  if(!code) { showToast('Enter a valid claim code', 'error'); return; }
-  code = String(code).trim().toUpperCase();
-  // prevent reuse
-  if(claimedCodes.includes(code)){ showToast('This code is already redeemed', 'warn'); return; }
-  // Validate: serverless — we cannot verify remote; we accept and credit.
-  coins += 100;
-  claimedCodes.push(code);
-  addHistory(`Redeemed claim code ${code} → +100 ₿`, 'ref', '+100 ₿');
-  saveAll(); renderAll();
-  showToast('+100 ₿ credited to your account.', 'success');
+/* ------------------ DAILY LOGIN BONUS (local) ------------------ */
+(function dailyLogin(){
+  const today = todayKey();
+  const last = localStorage.getItem(KEY_LAST_LOGIN);
+  if(last !== today){
+    addPoints(DAILY_LOGIN_BONUS, 'Daily Login');
+    localStorage.setItem(KEY_LAST_LOGIN, today);
+    showToast(`Daily login +${DAILY_LOGIN_BONUS} pts`);
+  }
+})();
+
+/* ------------------ GAME: Tap the coin (with progress) ------------------ */
+let roundTimer = null;
+let roundTimeLeft = 0;
+function updateGameProgress(){
+  const earned = Number(localStorage.getItem(KEY_GAME_EARNED) || 0);
+  const pct = Math.min(100, Math.round((earned / GAME_DAILY_LIMIT)*100));
+  $('#gameProgress').style.width = pct + '%';
+}
+function startGame(){
+  const today = todayKey();
+  const storedDay = localStorage.getItem(KEY_GAME_DAY);
+  if(storedDay !== today){
+    localStorage.setItem(KEY_GAME_DAY, today);
+    localStorage.setItem(KEY_GAME_EARNED, '0');
+  }
+  const earned = Number(localStorage.getItem(KEY_GAME_EARNED) || 0);
+  if(earned >= GAME_DAILY_LIMIT){ showToast('Daily game limit reached'); return; }
+  roundTimeLeft = GAME_ROUND_SECONDS;
+  $('#timeLeft').textContent = roundTimeLeft;
+  if(roundTimer) clearInterval(roundTimer);
+  roundTimer = setInterval(()=>{
+    roundTimeLeft--;
+    $('#timeLeft').textContent = roundTimeLeft;
+    if(roundTimeLeft <= 0){ clearInterval(roundTimer); showToast('Round finished'); }
+  }, 1000);
+}
+$('#coin').addEventListener('click', ()=>{
+  if(roundTimeLeft <= 0){ showToast('Start a round first'); return; }
+  const today = todayKey();
+  if(localStorage.getItem(KEY_GAME_DAY) !== today){ localStorage.setItem(KEY_GAME_DAY, today); localStorage.setItem(KEY_GAME_EARNED, '0'); }
+  let earned = Number(localStorage.getItem(KEY_GAME_EARNED) || 0);
+  if(earned >= GAME_DAILY_LIMIT){ showToast('Daily game limit reached'); return; }
+  earned += 1;
+  localStorage.setItem(KEY_GAME_EARNED, String(earned));
+  $('#gameEarned').textContent = earned;
+  updateGameProgress();
+  addPoints(1, 'Tap Game');
+  $('#coin').style.transform = 'scale(0.95)';
+  setTimeout(()=> $('#coin').style.transform = 'scale(1)', 80);
+});
+function resetGameDaily(){ localStorage.removeItem(KEY_GAME_DAY); localStorage.removeItem(KEY_GAME_EARNED); $('#gameEarned').textContent = '0'; updateGameProgress(); showToast('Daily game reset (dev)'); }
+
+/* ------------------ SPIN: Daily once (with wheel animation) ------------------ */
+function getTodayDateStr(){ return new Date().toDateString(); }
+function pickSpinPoints(){ const prizes=[5,8,10,12,15,20]; return prizes[Math.floor(Math.random()*prizes.length)]; }
+async function doSpin(){
+  // server-checked path
+  if(window.FIREBASE_READY && window.currentUserId){
+    const { getFirestore, doc, getDoc, updateDoc, setDoc, increment } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js');
+    const db = window._db;
+    const uid = window.currentUserId;
+    const ref = doc(db,'users',uid);
+    const snap = await getDoc(ref);
+    if(!snap.exists()) await setDoc(ref,{ points:0, lastSpin:null },{ merge:true });
+    const data = snap.data()||{};
+    const today = getTodayDateStr();
+    if(data.lastSpin === today){ showToast('Already spun today!'); return; }
+    const pts = pickSpinPoints();
+    // animate wheel
+    await animateWheelToPrize(pts);
+    await updateDoc(ref,{ points: increment(pts), lastSpin: today });
+    localStorage.setItem(KEY_POINTS, String((data.points||0)+pts));
+    animatePoints(Number($('#pointsAnimated').dataset.val||0), (data.points||0)+pts);
+    pushTxn(`Spin +${pts}`);
+    confetti({ particleCount: 160, spread: 120, origin: { y: 0.6 } });
+    showToast(`🎉 You won +${pts} pts`);
+    $('#lastSpinTxt').textContent = today;
+    return;
+  }
+  // Local fallback
+  const today = getTodayDateStr();
+  const last = localStorage.getItem(KEY_LAST_SPIN);
+  if(last === today){ showToast('Already spun today!'); return; }
+  const pts = pickSpinPoints();
+  await animateWheelToPrize(pts);
+  addPointsLocal(pts);
+  pushTxn(`Spin +${pts}`);
+  localStorage.setItem(KEY_LAST_SPIN, today);
+  $('#lastSpinTxt').textContent = today;
+  confetti({ particleCount: 160, spread: 120, origin: { y: 0.6 } });
+  showToast(`🎉 You won +${pts} pts`);
 }
 
-/* redeem button */
-document.getElementById('redeemBtn').addEventListener('click', ()=>{
-  const c = document.getElementById('redeemCodeInput').value;
-  tryRedeemCode(c);
-});
-
-/* copy referral */
-document.getElementById('copyRef').addEventListener('click', ()=>{
-  navigator.clipboard.writeText(refInput.value).then(()=> showToast('Referral link copied', 'info')).catch(()=> showToast('Copy failed', 'error'));
-});
-
-/* share tg / wa */
-document.getElementById('shareTG').addEventListener('click', ()=>{
-  const text = `Join me on ByteCoin Auto Mining! Use my referral: ${refInput.value} — get +100 ₿ instantly.`;
-  const url = `https://t.me/share/url?url=${encodeURIComponent(refInput.value)}&text=${encodeURIComponent(text)}`;
-  window.open(url, '_blank');
-});
-document.getElementById('shareWA').addEventListener('click', ()=>{
-  const text = `Join me on ByteCoin Auto Mining! Use my referral: ${refInput.value} — get +100 ₿ instantly.`;
-  const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
-  window.open(url, '_blank');
-});
-
-/* Channel join claim (click-based) */
-document.getElementById('claimChannelBtn').addEventListener('click', ()=>{
-  if(localStorage.getItem(KEY.channelBonus) === '1'){ showToast('Channel bonus already claimed', 'warn'); return; }
-  // click-based credit
-  coins += 500;
-  localStorage.setItem(KEY.channelBonus, '1');
-  addHistory('+500 ByteCoin (Channel Join Bonus)', 'ref', '+500 ₿');
-  saveAll(); renderAll();
-  showToast('Channel bonus credited: +500 ₿', 'success');
-});
-
-/* ------------------------
-   WITHDRAW (local/demo)
--------------------------*/
-document.getElementById('withdrawBtn').addEventListener('click', ()=>{
-  const amtEl = document.getElementById('withdrawAmount');
-  const toEl = document.getElementById('withdrawTo');
-  const rawAmt = (amtEl.value || '').toString().trim();
-  const toId = (toEl.value || '').trim() || 'unknown';
-  if(!rawAmt || isNaN(rawAmt) || Number(rawAmt) <= 0){ showToast('Enter a valid amount', 'error'); return; }
-  const amt = Math.floor(Number(rawAmt));
-  if(amt > coins){ showToast('Insufficient coins', 'error'); return; }
-  // subtract and record
-  coins -= amt;
-  addHistory(`Withdrew ${amt} ₿ to ${toId}`, 'withdraw', `-${amt} ₿`);
-  saveAll(); renderAll();
-  showToast(`Withdrawn ${amt} ₿ to ${toId} (demo).`, 'success');
-  // clear inputs
-  amtEl.value = '';
-  toEl.value = '';
-});
-
-/* demo withdraw button to show sample (no change) */
-document.getElementById('withdrawDemoBtn').addEventListener('click', ()=>{
-  showToast('Demo withdraw just shows the form — use Withdraw to perform a local demo transfer.', 'info', 3500);
-});
-
-/* wallet render on load */
-function init(){
-  renderAll();
-  // show outgoing claim box if exists
-  renderOutgoingClaim();
-  // restore miner state if saved
-  if(localStorage.getItem(KEY.minerOn) === '1') startMiner();
-  // catch-up offline mining
-  catchUpMining();
-  // default show home
-  showPage('page-home');
-}
-window.addEventListener('load', init);
-
-/* simple navigation */
-function showPage(id){
-  ['page-home','page-referral','page-wallet','page-profile'].forEach(p=>{
-    const el = document.getElementById(p);
-    if(el) el.style.display = (p === id) ? 'block' : 'none';
+function animateWheelToPrize(prize){
+  return new Promise(resolve=>{
+    // map prize to approximate angle (center of segment)
+    const segments = [5,8,10,12,15,20];
+    const idx = segments.indexOf(prize);
+    const segAngle = 360 / segments.length; // 60deg each
+    // pick a random rotation so that pointer lands in the selected segment
+    const base = 360 * 4; // at least 4 spins
+    const offset = idx * segAngle + segAngle/2; // center of segment
+    const final = base + (360 - offset) + (Math.random()* (segAngle/2) - segAngle/4);
+    const wheel = $('#wheel');
+    wheel.style.transition = 'transform 4s cubic-bezier(.25,.9,.25,1)';
+    wheel.style.transform = `rotate(${final}deg)`;
+    setTimeout(()=>{
+      // reset transform to keep future animations predictable
+      wheel.style.transition = '';
+      const normalized = final % 360;
+      wheel.style.transform = `rotate(${normalized}deg)`; // keep visual position
+      resolve();
+    },4200);
   });
-  document.querySelectorAll('footer.appfooter button').forEach(b=>b.classList.remove('active'));
-  if(id === 'page-home') document.getElementById('menuHome').classList.add('active');
-  if(id === 'page-referral') document.getElementById('menuReferral').classList.add('active');
-  if(id === 'page-wallet') document.getElementById('menuWallet').classList.add('active');
-  if(id === 'page-profile') document.getElementById('menuProfile').classList.add('active');
 }
-document.getElementById('menuHome').addEventListener('click', ()=> showPage('page-home'));
-document.getElementById('menuReferral').addEventListener('click', ()=> showPage('page-referral'));
-document.getElementById('menuWallet').addEventListener('click', ()=> showPage('page-wallet'));
-document.getElementById('menuProfile').addEventListener('click', ()=> showPage('page-profile'));
 
-/* save on unload + last tick timestamp for offline catch-up */
-function catchUpMining(){
-  const last = parseInt(localStorage.getItem('bc_lastTick') || '0', 10);
-  const minerSaved = localStorage.getItem(KEY.minerOn) === '1';
-  if(last > 0 && minerSaved){
-    const elapsed = Date.now() - last;
-    const gained = Math.floor(elapsed / MS_PER_POINT);
-    if(gained > 0){
-      addPoint(gained, `Offline catch-up (${gained} pts)`);
-      lastTickAt = Date.now();
-      showToast(`Offline catch-up: +${gained} pts`, 'info', 4500);
-    }
-  }
+/* ------------------ WALLET MODAL ------------------ */
+function openWallet(){
+  $('#walletModal').style.display='flex';
+  $('#walletBalance').textContent = getPoints();
+  renderTxns();
 }
-window.addEventListener('beforeunload', ()=> {
-  localStorage.setItem('bc_lastTick', String(Date.now()));
-  localStorage.setItem(KEY.minerOn, minerInterval ? '1' : '0');
-});
+function closeWallet(){ $('#walletModal').style.display='none'; }
+function clearLocal(){ localStorage.removeItem(KEY_TXN_HISTORY); renderTxns(); showToast('Local history cleared') }
 
-/* expose for debug */
-window.BYTE = { addPoint, startMiner, stopMiner, tryRedeemCode, state: ()=>({points,coins}) };
+/* ------------------ INIT ------------------ */
+function init(){
+  renderSites();
+  renderQuiz();
+  renderUpdates();
+  ensureRef();
+  updatePointsDisplay();
+  $('#GAME_LIMIT').textContent = GAME_DAILY_LIMIT;
+  const ge = localStorage.getItem(KEY_GAME_EARNED) || '0';
+  if($('#gameEarned')) $('#gameEarned').textContent = ge;
+  updateGameProgress();
+  $('#spinNow').addEventListener('click', doSpin);
+  $('#resetSpinDev').addEventListener('click', ()=>{ localStorage.removeItem(KEY_LAST_SPIN); $('#lastSpinTxt').textContent='—'; showToast('Spin reset (dev)'); });
+  const l = localStorage.getItem(KEY_LAST_SPIN); if(l) $('#lastSpinTxt').textContent = l;
+  // quick wallet mirror
+  renderTxns();
+}
+init();
 
 </script>
+
+<!-- ===================== FIREBASE (Referral + Leaderboard + Spin persistence) ===================== -->
+<script type="module">
+  // ---- Replace with your Firebase config ----
+  const firebaseConfig = {
+    apiKey: "AIzaSyDNRTY-dPDXHIzpYPm9OClUr4ucZNmb3tM",
+    authDomain: "guj-recruit-site.firebaseapp.com",
+    projectId: "guj-recruit-site",
+    storageBucket: "guj-recruit-site.firebasestorage.app",
+    messagingSenderId: "183532061050",
+    appId: "1:183532061050:web:0c65a374c88f7c8b4116c3",
+    measurementId: "G-PWDR359Y97"
+  };
+
+  const missingConfig = !firebaseConfig.apiKey || firebaseConfig.apiKey === 'YOUR_API_KEY';
+
+  if(!missingConfig){
+    try{
+      const { initializeApp } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js');
+      const { getAuth, signInAnonymously, onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js');
+      const { getFirestore, doc, setDoc, getDoc, updateDoc, increment, arrayUnion, collection, query, orderBy, limit, getDocs } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js');
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+      window._db = db;
+
+      window.FIREBASE_READY = true;
+      window.currentUserId = null;
+
+      // helper exposed to earlier script
+      window.addPointsFirebase = async function(n){
+        const ref = doc(db, 'users', window.currentUserId);
+        await setDoc(ref, { points: 0, joinedAt: new Date(), referrals: [], lastSpin: null }, { merge: true });
+        await updateDoc(ref, { points: increment(n) });
+        const snap = await getDoc(ref);
+        const pts = snap.data()?.points || 0;
+        // mirror local for offline consistency
+        localStorage.setItem(KEY_POINTS, String(pts));
+        const small = document.getElementById('pointsSmall');
+        if(small) small.textContent = pts;
+        return pts;
+      }
+
+      async function loadLeaderboard(){
+        const q = query(collection(db,'users'), orderBy('points','desc'), limit(10));
+        const snap = await getDocs(q);
+        const uid = window.currentUserId;
+        let html = '';
+        let rank = 1;
+        snap.forEach(docu=>{
+          const d = docu.data();
+          const me = (docu.id === uid);
+          const avatarText = (docu.id||'--').slice(0,2).toUpperCase();
+          html += `<div class="leader-row ${me?'leader-me':''}"><div style="display:flex;align-items:center"><div class="avatar">${avatarText}</div><div>#${rank} ${me?'You':docu.id.slice(0,6)}</div></div><div>${d.points||0} pts</div></div>`;
+          rank++;
+        });
+        if(!html) html = '<div class="leader-row"><div>No data yet</div><div>—</div></div>';
+        const lb = document.getElementById('leaderboard');
+        if(lb) lb.innerHTML = html;
+      }
+
+      function setRefUI(uid){
+        const link = location.origin + location.pathname + '?ref=' + encodeURIComponent(uid);
+        const elCode = document.getElementById('myRef');
+        const elLink = document.getElementById('myRefLink');
+        if(elCode) elCode.textContent = uid;
+        if(elLink) elLink.textContent = link;
+      }
+
+      function ensureUserDoc(uid){
+        return setDoc(doc(db,'users',uid), { points:0, referrals:[], referredBy: null, joinedAt: new Date(), lastSpin: null }, { merge:true });
+      }
+
+      async function handleReferral(uid){
+        const p = new URLSearchParams(location.search);
+        const ref = p.get('ref');
+        if(!ref || ref === uid) return;
+        const meRef = doc(db,'users',uid);
+        const meSnap = await getDoc(meRef);
+        const already = meSnap.exists() && meSnap.data().referredBy;
+        if(already) return;
+        await setDoc(meRef, { referredBy: ref }, { merge:true });
+        await updateDoc(doc(db,'users',ref), { points: increment(20), referrals: arrayUnion(uid) });
+        await updateDoc(meRef, { points: increment(10) });
+        showToast('Referral applied 🎉 +10 pts');
+        const snap = await getDoc(meRef);
+        const pts = snap.data()?.points || 0;
+        localStorage.setItem(KEY_POINTS, String(pts));
+        const pa = document.getElementById('pointsAnimated');
+        if(pa){ pa.textContent = pts + ' pts'; pa.dataset.val = pts; }
+        const ps = document.getElementById('pointsSmall'); if(ps) ps.textContent = pts;
+      }
+
+      onAuthStateChanged(auth, async (user)=>{
+        if(user){
+          window.currentUserId = user.uid;
+          await ensureUserDoc(user.uid);
+          setRefUI(user.uid);
+          // sync points from server into UI/local
+          const snap = await getDoc(doc(db,'users',user.uid));
+          const d = snap.data()||{};
+          const pts = d.points || 0;
+          localStorage.setItem(KEY_POINTS, String(pts));
+          const pa = document.getElementById('pointsAnimated');
+          if(pa){ pa.textContent = pts + ' pts'; pa.dataset.val = pts; }
+          const ps = document.getElementById('pointsSmall'); if(ps) ps.textContent = pts;
+          if(d.lastSpin) document.getElementById('lastSpinTxt').textContent = d.lastSpin;
+          // handle referral if opened with ?ref=
+          await handleReferral(user.uid);
+          // load leaderboard
+          await loadLeaderboard();
+        }
+      });
+
+      // Start anonymous login (if not already)
+      signInAnonymously(auth).catch(e=> console.error('Anon sign-in error', e));
+
+    }catch(e){
+      console.warn('Firebase failed to init. Falling back to local-only mode.', e);
+      window.FIREBASE_READY = false;
+    }
+  } else {
+    window.FIREBASE_READY = false;
+  }
+</script>
+
 </body>
 </html>
