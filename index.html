@@ -1,128 +1,99 @@
 <!DOCTYPE html>
 <html lang="gu">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Gujarat Recruitment Hub — Refer, Spin & Earn</title>
-  <link rel="icon" href="coin.png">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Gujarat Recruitment Hub — Refer & Earn</title>
 
-  <!-- confetti CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<!-- confetti CDN -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-  <style>
-  :root{
-    --bg:#070707;
-    --card:#0f1314;
-    --primary:#00e6e6;
-    --accent:#ff6fbf;
-    --muted:#9aa0a6;
-    --glass: rgba(255,255,255,0.04);
-    --success:#00ffcc;
-    --danger:#ff5252;
-    --gold1: #ffe082;
-    --gold2: #ffb300;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    font-family: "Noto Sans Gujarati", "Inter", system-ui, Arial, sans-serif;
-    background: radial-gradient(1200px 600px at 10% 10%, rgba(0,140,140,0.06), transparent), linear-gradient(180deg,#050506,#0f1112);
-    color:#e6eef0;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-  }
+<style>
+:root{
+  --bg:#070707;
+  --card:#121212;
+  --primary:#00e6e6;
+  --accent:#ff6fbf;
+  --muted:#9aa0a6;
+  --glass: rgba(255,255,255,0.04);
+  --success:#00ffcc;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: "Noto Sans Gujarati", "Inter", system-ui, Arial, sans-serif;
+  background: linear-gradient(180deg,#050506,#0f1112);
+  color:#e6eef0;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
 
-  /* Header */
-  .header{
-    position:sticky;top:0;z-index:40;
-    display:flex;justify-content:space-between;align-items:center;
-    padding:12px 16px;background:linear-gradient(90deg,var(--primary),#0077ff);
-    box-shadow:0 6px 24px rgba(0,0,0,0.6);
-  }
-  .app-title{font-weight:900;font-size:16px;letter-spacing:0.2px}
-  .points-pill{
-    background:linear-gradient(90deg,#ffd54f,#ff9100);color:#111;padding:6px 10px;border-radius:999px;font-weight:800;
-    box-shadow:0 8px 30px rgba(255,144,35,0.12);
-    display:flex;gap:10px;align-items:center;cursor:pointer
-  }
+/* Header */
+.header{
+  position:sticky;top:0;z-index:40;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 16px;background:linear-gradient(90deg,var(--primary),#0077ff);
+  box-shadow:0 6px 24px rgba(0,0,0,0.6);
+}
+.app-title{font-weight:800;font-size:16px}
+.points-pill{
+  background:linear-gradient(90deg,#ffd54f,#ff9100);color:#111;padding:6px 10px;border-radius:999px;font-weight:800;
+  box-shadow:0 8px 30px rgba(255,144,35,0.12);
+  display:flex;gap:10px;align-items:center;
+}
 
-  /* main layout */
-  .container{padding:16px;padding-bottom:130px}
+/* main layout */
+.container{padding:16px;padding-bottom:110px}
 
-  /* cards grid */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
-  .card{
-    background:var(--card);padding:12px;border-radius:12px;text-align:center;cursor:pointer;
-    box-shadow:0 6px 20px rgba(0,0,0,0.6);transition:transform .18s,box-shadow .18s,background .18s;
-    border:1px solid rgba(255,255,255,0.02);
-  }
-  .card:hover{transform:translateY(-6px) scale(1.02); box-shadow:0 12px 34px rgba(0,230,230,0.06); border-color:rgba(0,230,230,0.06)}
-  .card .icon{font-size:22px;margin-bottom:8px;color:var(--primary)}
+/* cards grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.card{
+  background:var(--card);padding:12px;border-radius:12px;text-align:center;cursor:pointer;
+  box-shadow:0 6px 20px rgba(0,0,0,0.6);transition:transform .18s,box-shadow .18s,background .18s;
+  border:1px solid rgba(255,255,255,0.02);
+}
+.card:hover{transform:translateY(-6px) scale(1.02); box-shadow:0 12px 34px rgba(0,230,230,0.06); border-color:rgba(0,230,230,0.06)}
+.card .icon{font-size:22px;margin-bottom:8px;color:var(--primary)}
 
-  /* refer box */
-  .refer-box{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03); box-shadow:0 6px 20px rgba(0,0,0,0.6)}
-  .small{color:var(--muted);font-size:13px}
+/* refer box */
+.refer-box{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03); box-shadow:0 6px 20px rgba(0,0,0,0.6)}
+.small{color:var(--muted);font-size:13px}
 
-  /* buttons */
-  .btn{border:none;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:800}
-  .btn.primary{background:linear-gradient(90deg,var(--primary),#00a6ff);color:#001;text-shadow:0 1px 0 rgba(255,255,255,0.02);box-shadow:0 8px 24px rgba(0,170,255,0.12)}
-  .btn.ghost{background:rgba(255,255,255,0.03);color:#e6eef0}
-  .btn.warn{background:rgba(255,82,82,0.15);color:#ffd3d3;border:1px solid rgba(255,82,82,0.25)}
+/* buttons */
+.btn{border:none;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:800}
+.btn.primary{background:linear-gradient(90deg,var(--primary),#00a6ff);color:#001;text-shadow:0 1px 0 rgba(255,255,255,0.02);box-shadow:0 8px 24px rgba(0,170,255,0.12)}
+.btn.ghost{background:rgba(255,255,255,0.03);color:#e6eef0}
 
-  /* footer nav */
-  .footer{position:fixed;left:0;right:0;bottom:0;height:92px;background:rgba(2,6,8,0.88);display:flex;align-items:center;justify-content:space-around;border-top:1px solid rgba(255,255,255,0.02);backdrop-filter:blur(8px);z-index:50}
-  .nav-btn{background:none;border:none;color:var(--muted);font-weight:700;display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px;cursor:pointer}
-  .nav-btn.active{color:var(--primary);transform:translateY(-2px)}
+/* footer nav */
+.footer{position:fixed;left:0;right:0;bottom:0;height:82px;background:rgba(2,6,8,0.85);display:flex;align-items:center;justify-content:space-around;border-top:1px solid rgba(255,255,255,0.02);backdrop-filter:blur(8px);z-index:50}
+.nav-btn{background:none;border:none;color:var(--muted);font-weight:700;display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px;cursor:pointer}
+.nav-btn.active{color:var(--primary);transform:translateY(-2px)}
 
-  /* quiz */
-  .quiz-q{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.02)}
-  .opt{padding:10px;border-radius:10px;margin:8px 0;background:rgba(255,255,255,0.02);cursor:pointer;border:1px solid rgba(255,255,255,0.02)}
-  .opt.correct{background:rgba(0,255,204,0.12);border-color:rgba(0,255,204,0.25)}
-  .opt.wrong{background:rgba(255,80,80,0.08);border-color:rgba(255,80,80,0.25)}
+/* quiz */
+.quiz-q{background:var(--card);padding:14px;border-radius:12px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.02)}
+.opt{padding:10px;border-radius:10px;margin:8px 0;background:rgba(255,255,255,0.02);cursor:pointer;border:1px solid rgba(255,255,255,0.02)}
+.opt.correct{background:rgba(0,255,204,0.12);border-color:rgba(0,255,204,0.25)}
+.opt.wrong{background:rgba(255,80,80,0.08);border-color:rgba(255,80,80,0.25)}
 
-  /* game */
-  .game-box{background:var(--card);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);text-align:center}
-  .coin{width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 35% 35%, var(--gold1), var(--gold2) 60%, #ff8f00);display:grid;place-items:center;font-size:28px;margin:12px auto;box-shadow:0 8px 28px rgba(255,160,0,0.14);cursor:pointer;user-select:none;transition:transform .06s}
+/* game */
+.game-box{background:var(--card);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);text-align:center}
+.coin{width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 35% 35%, #ffe082, #ffb300 60%, #ff8f00);display:grid;place-items:center;font-size:28px;margin:12px auto;box-shadow:0 8px 28px rgba(255,160,0,0.14);cursor:pointer;user-select:none;transition:transform .06s}
 
-  /* toast */
-  .toast{position:fixed;left:50%;transform:translateX(-50%);top:92px;background:#0b1112;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);display:none;z-index:200}
+/* toast */
+.toast{position:fixed;left:50%;transform:translateX(-50%);top:92px;background:#0b1112;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);display:none;z-index:200}
 
-  /* helper */
-  .hint{font-size:13px;color:var(--muted);margin-top:8px}
-  .center{display:flex;align-items:center;justify-content:center}
-
-  /* leaderboard */
-  .leader-row{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:10px;border-bottom:1px solid rgba(255,255,255,0.03)}
-  .leader-me{background:linear-gradient(90deg, rgba(0,230,230,0.04), rgba(124,77,255,0.03))}
-  .avatar{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.03);display:inline-grid;place-items:center;font-weight:800;margin-right:8px}
-
-  /* modal */
-  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:120}
-  .modal .box{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:16px;min-width:320px;max-width:94vw;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
-  .modal .box h3{margin:0 0 8px 0}
-  .chips{display:flex;gap:8px;flex-wrap:wrap}
-  .chip{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.06);padding:4px 8px;border-radius:999px;font-size:12px}
-
-  /* spin wheel */
-  #wheel-wrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-  #wheel{width:180px;height:180px;border-radius:50%;background:conic-gradient(#00e6e6 0 45deg,#7c4dff 45deg 90deg,#ff6fbf 90deg 135deg,#ffd54f 135deg 180deg,#66bb6a 180deg 225deg,#29b6f6 225deg 270deg,#ef5350 270deg 315deg,#ab47bc 315deg 360deg);box-shadow:0 12px 40px rgba(0,0,0,.4);position:relative;transition:transform 4s cubic-bezier(.25,.9,.25,1)}
-  #pointer{position:absolute;left:50%;transform:translateX(-50%);top:-8px;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:18px solid #fff;border-radius:2px}
-
-  /* progress bar */
-  .progress{height:12px;background:rgba(255,255,255,0.04);border-radius:999px;overflow:hidden}
-  .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--primary),#00a6ff);transition:width .4s}
-
-  /* responsive */
-  @media (max-width:420px){.header{padding:10px}.container{padding:12px}.coin{width:94px;height:94px}}
-  </style>
+/* helper */
+.hint{font-size:13px;color:var(--muted);margin-top:8px}
+.center{display:flex;align-items:center;justify-content:center}
+</style>
 </head>
 <body>
 
 <!-- Header -->
 <div class="header">
   <div class="app-title">Gujarat Recruitment Hub</div>
-  <div class="points-pill" title="Open Wallet" onclick="openWallet()">
+  <div class="points-pill" title="Total Points">
     <div id="pointsAnimated" style="min-width:72px;text-align:center">0 pts</div>
   </div>
 </div>
@@ -141,20 +112,13 @@
   <div id="page-quiz" class="page" style="display:none">
     <h3>Mock Test (Sample)</h3>
     <div id="quizContainer"></div>
-    <div style="display:flex;gap:8px;justify-content:space-between;align-items:center;margin-top:8px">
-      <div class="small">Try a random 2-question mini test</div>
-      <button class="btn ghost" onclick="renderQuiz(true)">Shuffle</button>
-    </div>
   </div>
 
-  <!-- Updates + Leaderboard -->
+  <!-- Updates -->
   <div id="page-updates" class="page" style="display:none">
     <h3>Updates</h3>
     <div id="updatesList"></div>
     <p class="hint" id="lastSync"></p>
-
-    <h3 style="margin-top:18px">🏆 Leaderboard (Top 10)</h3>
-    <div id="leaderboard" class="card" style="padding:0"></div>
   </div>
 
   <!-- Refer -->
@@ -165,7 +129,6 @@
         <div>
           <div class="small">તમારો Referral Code</div>
           <div style="font-weight:900;font-size:20px" id="myRef">--</div>
-          <div class="small" style="margin-top:6px">Referral Link: <span id="myRefLink">—</span></div>
         </div>
         <div style="text-align:right">
           <div class="small">તમારા પોઇન્ટ્સ</div>
@@ -174,10 +137,9 @@
       </div>
 
       <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn primary" onclick="copyLink()">Copy Link</button>
         <button class="btn ghost" onclick="shareWhatsapp()">WhatsApp</button>
         <button class="btn ghost" onclick="shareTelegram()">Telegram</button>
-        <button class="btn ghost" onclick="copyLink()">Copy Link</button>
-        <button class="btn ghost" onclick="openLink('https://t.me/gujarat_web')">Telegram Group</button>
       </div>
 
       <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)">
@@ -187,7 +149,7 @@
         <div class="small">Join ચેનલ: <a href="https://t.me/granthnirman" target="_blank" style="color:var(--primary)">https://t.me/granthnirman</a></div>
       </div>
 
-      <p class="hint">નોંધ: Join કર્યા પછી local browser માં એકવાર જ 1000 પોઇન્ટ આપ્યા જશે. For real cross-device credits, Firebase enabled.</p>
+      <p class="hint">નોંધ: Join થયા પછી local browser માં એકવાર જ 1000 પોઇન્ટ આપ્યા જશે. For real cross-device credits, server/backend required.</p>
     </div>
   </div>
 
@@ -201,42 +163,7 @@
         <button class="btn ghost" onclick="resetGameDaily()">Reset Daily (dev)</button>
       </div>
       <p class="hint">Daily game limit: <span id="gameEarned">0</span> / <span id="GAME_LIMIT">50</span> pts</p>
-      <div class="progress" style="margin-top:8px"><i id="gameProgress"></i></div>
       <p class="hint">Round time left: <span id="timeLeft">0</span>s</p>
-    </div>
-  </div>
-<script>
-// ByteCoin WebApp link open
-$('#openGame').addEventListener('click', ()=>{
-  window.location.href = "https://bytecoin-virid.vercel.app/";
-});
-</script>
-  
-
-  <!-- Spin -->
-  <div id="page-spin" class="page" style="display:none">
-    <h3>🎡 Daily Spin</h3>
-    <div class="card" style="padding:18px">
-      <div id="wheel-wrap">
-        <div style="position:relative">
-          <div id="pointer"></div>
-          <div id="wheel"></div>
-        </div>
-        <div>
-          <div class="chips" style="margin-bottom:10px">
-            <span class="chip">5 pts</span>
-            <span class="chip">8 pts</span>
-            <span class="chip">10 pts</span>
-            <span class="chip">12 pts</span>
-            <span class="chip">15 pts</span>
-            <span class="chip">20 pts</span>
-          </div>
-          <button id="spinNow" class="btn primary">Spin Now</button>
-          <button id="resetSpinDev" class="btn ghost" style="margin-left:8px">Reset (dev)</button>
-          <p class="hint" id="spinHint">You can spin once per day.</p>
-          <p class="hint">Last spin: <span id="lastSpinTxt">—</span></p>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -248,40 +175,20 @@ $('#openGame').addEventListener('click', ()=>{
   <button class="nav-btn" onclick="goto('page-quiz', this)"><div>📝</div><div>Mock</div></button>
   <button class="nav-btn" onclick="goto('page-updates', this)"><div>🔔</div><div>Updates</div></button>
   <button class="nav-btn" onclick="goto('page-refer', this)"><div>🤝</div><div>Refer</div></button>
-  <button class="nav-btn" onclick="goto('page-spin', this)"><div>🎡</div><div>Spin</div></button>
   <button class="nav-btn" onclick="goto('page-game', this)"><div>🎮</div><div>Game</div></button>
 </div>
 
 <!-- toast -->
 <div id="toast" class="toast"></div>
 
-<!-- Wallet Modal -->
-<div id="walletModal" class="modal">
-  <div class="box">
-    <h3>💳 Wallet Balance</h3>
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div class="small">Total Points</div>
-      <div style="font-weight:900" id="walletBalance">0</div>
-    </div>
-    <div style="margin-top:10px" class="small">Recent (local) history</div>
-    <div id="txnList" style="max-height:180px;overflow:auto;margin-top:6px;border-top:1px solid rgba(255,255,255,0.06)"></div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
-      <button class="btn ghost" onclick="closeWallet()">Close</button>
-      <button class="btn warn" onclick="clearLocal()">Clear Local</button>
-    </div>
-  </div>
-</div>
-
 <script>
 /* ------------------ CONFIG & KEYS ------------------ */
-const KEY_POINTS = 'grh_points_v3';
-const KEY_REF = 'grh_ref_v3';
-const KEY_JOINED_CHANNEL = 'grh_joined_channel_v3';
-const KEY_LAST_LOGIN = 'grh_last_login_v3';
-const KEY_GAME_DAY = 'grh_game_day_v3';
-const KEY_GAME_EARNED = 'grh_game_earned_v3';
-const KEY_LAST_SPIN = 'grh_last_spin_v2';
-const KEY_TXN_HISTORY = 'grh_txn_history_v2';
+const KEY_POINTS = 'grh_points_v2';
+const KEY_REF = 'grh_ref_v2';
+const KEY_JOINED_CHANNEL = 'grh_joined_channel_v2';
+const KEY_LAST_LOGIN = 'grh_last_login_v2';
+const KEY_GAME_DAY = 'grh_game_day_v2';
+const KEY_GAME_EARNED = 'grh_game_earned_v2';
 
 const DAILY_LOGIN_BONUS = 5;
 const GAME_DAILY_LIMIT = 50;
@@ -294,38 +201,15 @@ function showToast(msg, ms=1600){
   setTimeout(()=> t.style.display='none', ms);
 }
 function todayKey(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
-function pushTxn(text){
-  const arr = JSON.parse(localStorage.getItem(KEY_TXN_HISTORY)||'[]');
-  arr.unshift({ t: new Date().toISOString(), text });
-  localStorage.setItem(KEY_TXN_HISTORY, JSON.stringify(arr.slice(0,40)));
-}
-function renderTxns(){
-  const box = $('#txnList');
-  const arr = JSON.parse(localStorage.getItem(KEY_TXN_HISTORY)||'[]');
-  box.innerHTML = arr.length? arr.map(x=>`<div class="leader-row" style="border:none"><div class="small">${new Date(x.t).toLocaleString()}</div><div>${x.text}</div></div>`).join('') : '<div class="small">No local history</div>';
-}
 
 /* ------------------ POINTS (animated) ------------------ */
 function getPoints(){ return Number(localStorage.getItem(KEY_POINTS) || 0); }
-function setPoints(n){ localStorage.setItem(KEY_POINTS, String(n)); updatePointsDisplay(); if($('#walletBalance')) $('#walletBalance').textContent = n; }
-
-async function addPoints(n, note){
-  if(window.FIREBASE_READY && window.currentUserId){
-    const to = await addPointsFirebase(n);
-    if(note) pushTxn(`${note} +${n}`);
-    animatePoints(Number($('#pointsAnimated').dataset.val||0), to);
-    return to;
-  } else {
-    if(note) pushTxn(`${note} +${n}`);
-    return addPointsLocal(n);
-  }
-}
-function addPointsLocal(n){
+function setPoints(n){ localStorage.setItem(KEY_POINTS, String(n)); updatePointsDisplay(); }
+function addPoints(n){
   const from = getPoints();
   const to = from + n;
   localStorage.setItem(KEY_POINTS, String(to));
   animatePoints(from, to);
-  if($('#walletBalance')) $('#walletBalance').textContent = to;
   return to;
 }
 function animatePoints(from, to){
@@ -335,20 +219,18 @@ function animatePoints(from, to){
   const start = performance.now();
   function step(now){
     const t = Math.min(1, (now - start)/duration);
-    const val = Math.round(from + (to - from) * (1 - Math.pow(1 - t, 3)));
+    const val = Math.round(from + (to - from) * easeOutCubic(t));
     el.textContent = val + ' pts';
-    el.dataset.val = val;
-    if(small) small.textContent = val;
+    small.textContent = val;
     if(t < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
 }
+function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
 function updatePointsDisplay(){
   const v = getPoints();
   $('#pointsAnimated').textContent = v + ' pts';
-  $('#pointsAnimated').dataset.val = v;
-  if($('#pointsSmall')) $('#pointsSmall').textContent = v;
-  if($('#walletBalance')) $('#walletBalance').textContent = v;
+  $('#pointsSmall').textContent = v;
 }
 
 /* ------------------ NAV ------------------ */
@@ -362,9 +244,8 @@ function goto(pageId, btn){
 /* ------------------ SITES ------------------ */
 const sites = [
   {name:'OJAS', url:'https://ojas.gujarat.gov.in', icon:'🗂️'},
-  {name:'GPRB', url:'https://gprb.gujarat.gov.in', icon:'👮'},
+  {name:'GPRB', url:'https://police.gujarat.gov.in', icon:'👮'},
   {name:'GSSSB', url:'https://gsssb.gujarat.gov.in', icon:'📋'},
-  {name:'GPSSB', url:'https://gpssb.gujarat.gov.in', icon:'👳'},
   {name:'GPSC', url:'https://gpsc.gujarat.gov.in', icon:'🏛️'},
   {name:'GPSC-OJAS', url:'https://gpsc-ojas.gujarat.gov.in', icon:'📝'}
 ];
@@ -386,26 +267,21 @@ function renderSites(){
 
 /* ------------------ QUIZ ------------------ */
 const quiz = [
-  {q: "ભારતના પ્રથમ વડાપ્રધાન કોણ હતા?", opts:["સરદાર પટેલ","મહાત્મા ગાંધી","જવાહરલાલ નેહરુ","લાલ બહાદુર શાસ્ત્રી"], ans:"જવાહરલાલ નેહરુ"},
-  {q: "ગુજરાતની રાજધાની કઈ છે?", opts:["અમદાવાદ","ગાંધીનગર","વડોદરા","સુરત"], ans:"ગાંધીનગર"},
-  {q: "ભારતનું રાષ્ટ્રીય પ્રાણી કયું છે?", opts:["સિંહ","હાથી","બાઘ","દેવા"], ans:"બાઘ"}
+  {q: "ભારતના પ્રથમ વડાપ્રધાન કોણ હતા?", opts:["સર્દાર પટેલ","મહાત્મા ગાંધી","જવાહરલાલ નેહરુ","લાલ બહાદુર શાસ્ત્રી"], ans:"જવાહરલાલ નેહરુ"},
+  {q: "ગુજરાતની રાજધાની કઈ છે?", opts:["અમદાવાદ","ગાંધીનગર","વડોદરા","સુરત"], ans:"ગાંધીનગર"}
 ];
-function shuffleArray(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]] } return a }
-function renderQuiz(shuffle=false){
+function renderQuiz(){
   const c = $('#quizContainer'); c.innerHTML='';
-  let qset = quiz.slice();
-  if(shuffle) qset = shuffleArray(qset);
-  qset.slice(0,3).forEach(item=>{ // show up to 3
+  quiz.forEach(item=>{
     const box = document.createElement('div'); box.className='quiz-q';
     const qh = document.createElement('div'); qh.style.fontWeight='800'; qh.style.marginBottom='8px'; qh.textContent = item.q;
     box.appendChild(qh);
-    const opts = shuffleArray(item.opts.slice());
-    opts.forEach(opt=>{
+    item.opts.forEach(opt=>{
       const o = document.createElement('div'); o.className='opt'; o.textContent = opt;
       o.onclick = ()=>{
         if(o.dataset.locked) return;
         box.querySelectorAll('.opt').forEach(x=> x.dataset.locked = 1);
-        if(opt === item.ans){ o.classList.add('correct'); addPoints(2, 'Quiz'); showToast('+2 pts'); }
+        if(opt === item.ans){ o.classList.add('correct'); addPoints(2); showToast('+2 pts'); }
         else { o.classList.add('wrong'); }
       };
       box.appendChild(o);
@@ -431,17 +307,9 @@ function renderUpdates(){
 
 /* ------------------ REFERRAL & SHARE ------------------ */
 function ensureRef(){
-  if(window.currentUserId){
-    $('#myRef').textContent = window.currentUserId;
-    const link = buildRefLink(window.currentUserId);
-    $('#myRefLink').textContent = link;
-    return window.currentUserId;
-  }
   let code = localStorage.getItem(KEY_REF);
   if(!code){ code = 'GUJ' + Math.random().toString(36).slice(2,7).toUpperCase(); localStorage.setItem(KEY_REF, code); }
   $('#myRef').textContent = code;
-  const link = buildRefLink(code);
-  $('#myRefLink').textContent = link;
   return code;
 }
 function buildRefLink(code){ return location.origin + location.pathname + '?ref=' + encodeURIComponent(code); }
@@ -449,8 +317,8 @@ function copyLink(){ const link = buildRefLink(ensureRef()); navigator.clipboard
 function shareWhatsapp(){ const link = buildRefLink(ensureRef()); const msg = encodeURIComponent(`Gujarat Recruitment Hub — Refer & Earn\nJoin: ${link}`); window.open('https://wa.me/?text='+msg, '_blank'); }
 function shareTelegram(){ const link = buildRefLink(ensureRef()); const text = encodeURIComponent('Gujarat Recruitment Hub — Refer & Earn'); window.open('https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+text, '_blank'); }
 
-// Handle incoming ?ref= (local demo)
-(function handleIncomingRefLocal(){
+/* When someone opens with ?ref=CODE (demo: credit joiner + attempt server notify for referrer) */
+(function handleIncomingRef(){
   const p = new URLSearchParams(window.location.search);
   const incoming = p.get('ref');
   if(!incoming) return;
@@ -458,51 +326,58 @@ function shareTelegram(){ const link = buildRefLink(ensureRef()); const text = e
   if(incoming && incoming !== myCode){
     const joinKey = 'grh_joined_via_' + incoming;
     if(!localStorage.getItem(joinKey)){
-      addPointsLocal(10); // local joiner bonus if Firebase not ready
+      addPoints(10); // joiner bonus locally
       localStorage.setItem(joinKey, '1');
-      pushTxn('Referral join bonus +10');
       showToast('Joined via referral — +10 pts');
+
+      // Placeholder to notify server to credit the referrer (replace with your endpoint)
+      // fetch('/api/credit-referrer', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({refCode: incoming})});
+      console.log('Would notify server to credit referrer:', incoming);
     }
   }
 })();
 
-/* ------------------ Join Channel -> 1000 pts + confetti (improved) ------------------ */
+/* ------------------ Join Channel -> 1000 pts + confetti ------------------ */
 function openChannel(){
   const url = 'https://t.me/granthnirman';
   openLink(url);
   const key = KEY_JOINED_CHANNEL;
-  if(!localStorage.getItem(key) && !(window.FIREBASE_READY && localStorage.getItem(key+'-server'))){
-    // prefer Firebase verification if available
-    addPoints(1000, 'Channel Join');
+  if(!localStorage.getItem(key)){
+    addPoints(1000);
     localStorage.setItem(key, '1');
-    if(window.FIREBASE_READY && window.currentUserId){ localStorage.setItem(key+'-server', '1'); }
     showToast('+1000 pts — Welcome!');
-    confetti({ particleCount: 160, spread: 120, origin: { y: 0.6 }, colors: ['#ff6fbf','#00e6e6','#ffd54f','#7c4dff','#66bb6a'] });
-    confetti({ particleCount: 60, spread: 40, origin: { y: 0.35 } });
+    // confetti celebration
+    confetti({
+      particleCount: 160,
+      spread: 120,
+      origin: { y: 0.6 },
+      colors: ['#ff6fbf','#00e6e6','#ffd54f','#7c4dff','#66bb6a']
+    });
+    // small burst center
+    confetti({
+      particleCount: 60,
+      spread: 40,
+      origin: { y: 0.35 }
+    });
   } else {
-    showToast('તમે પહેલેથી જ 1000 પોઇન્ટ લઈ ચૂકયા છો');
+    showToast('તમે પહેલેથી જ 1000 પોઇન્ટ લઈ ચૂક્યા છો');
   }
 }
 
-/* ------------------ DAILY LOGIN BONUS (local) ------------------ */
+/* ------------------ DAILY LOGIN BONUS ------------------ */
 (function dailyLogin(){
   const today = todayKey();
   const last = localStorage.getItem(KEY_LAST_LOGIN);
   if(last !== today){
-    addPoints(DAILY_LOGIN_BONUS, 'Daily Login');
+    addPoints(DAILY_LOGIN_BONUS);
     localStorage.setItem(KEY_LAST_LOGIN, today);
     showToast(`Daily login +${DAILY_LOGIN_BONUS} pts`);
   }
 })();
 
-/* ------------------ GAME: Tap the coin (with progress) ------------------ */
+/* ------------------ GAME: Tap the coin ------------------ */
 let roundTimer = null;
 let roundTimeLeft = 0;
-function updateGameProgress(){
-  const earned = Number(localStorage.getItem(KEY_GAME_EARNED) || 0);
-  const pct = Math.min(100, Math.round((earned / GAME_DAILY_LIMIT)*100));
-  $('#gameProgress').style.width = pct + '%';
-}
 function startGame(){
   const today = todayKey();
   const storedDay = localStorage.getItem(KEY_GAME_DAY);
@@ -530,232 +405,32 @@ $('#coin').addEventListener('click', ()=>{
   earned += 1;
   localStorage.setItem(KEY_GAME_EARNED, String(earned));
   $('#gameEarned').textContent = earned;
-  updateGameProgress();
-  addPoints(1, 'Tap Game');
+  addPoints(1);
+  // tiny coin pop
   $('#coin').style.transform = 'scale(0.95)';
   setTimeout(()=> $('#coin').style.transform = 'scale(1)', 80);
 });
-function resetGameDaily(){ localStorage.removeItem(KEY_GAME_DAY); localStorage.removeItem(KEY_GAME_EARNED); $('#gameEarned').textContent = '0'; updateGameProgress(); showToast('Daily game reset (dev)'); }
 
-/* ------------------ SPIN: Daily once (with wheel animation) ------------------ */
-function getTodayDateStr(){ return new Date().toDateString(); }
-function pickSpinPoints(){ const prizes=[5,8,10,12,15,20]; return prizes[Math.floor(Math.random()*prizes.length)]; }
-async function doSpin(){
-  // server-checked path
-  if(window.FIREBASE_READY && window.currentUserId){
-    const { getFirestore, doc, getDoc, updateDoc, setDoc, increment } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js');
-    const db = window._db;
-    const uid = window.currentUserId;
-    const ref = doc(db,'users',uid);
-    const snap = await getDoc(ref);
-    if(!snap.exists()) await setDoc(ref,{ points:0, lastSpin:null },{ merge:true });
-    const data = snap.data()||{};
-    const today = getTodayDateStr();
-    if(data.lastSpin === today){ showToast('Already spun today!'); return; }
-    const pts = pickSpinPoints();
-    // animate wheel
-    await animateWheelToPrize(pts);
-    await updateDoc(ref,{ points: increment(pts), lastSpin: today });
-    localStorage.setItem(KEY_POINTS, String((data.points||0)+pts));
-    animatePoints(Number($('#pointsAnimated').dataset.val||0), (data.points||0)+pts);
-    pushTxn(`Spin +${pts}`);
-    confetti({ particleCount: 160, spread: 120, origin: { y: 0.6 } });
-    showToast(`🎉 You won +${pts} pts`);
-    $('#lastSpinTxt').textContent = today;
-    return;
-  }
-  // Local fallback
-  const today = getTodayDateStr();
-  const last = localStorage.getItem(KEY_LAST_SPIN);
-  if(last === today){ showToast('Already spun today!'); return; }
-  const pts = pickSpinPoints();
-  await animateWheelToPrize(pts);
-  addPointsLocal(pts);
-  pushTxn(`Spin +${pts}`);
-  localStorage.setItem(KEY_LAST_SPIN, today);
-  $('#lastSpinTxt').textContent = today;
-  confetti({ particleCount: 160, spread: 120, origin: { y: 0.6 } });
-  showToast(`🎉 You won +${pts} pts`);
-}
-
-function animateWheelToPrize(prize){
-  return new Promise(resolve=>{
-    // map prize to approximate angle (center of segment)
-    const segments = [5,8,10,12,15,20];
-    const idx = segments.indexOf(prize);
-    const segAngle = 360 / segments.length; // 60deg each
-    // pick a random rotation so that pointer lands in the selected segment
-    const base = 360 * 4; // at least 4 spins
-    const offset = idx * segAngle + segAngle/2; // center of segment
-    const final = base + (360 - offset) + (Math.random()* (segAngle/2) - segAngle/4);
-    const wheel = $('#wheel');
-    wheel.style.transition = 'transform 4s cubic-bezier(.25,.9,.25,1)';
-    wheel.style.transform = `rotate(${final}deg)`;
-    setTimeout(()=>{
-      // reset transform to keep future animations predictable
-      wheel.style.transition = '';
-      const normalized = final % 360;
-      wheel.style.transform = `rotate(${normalized}deg)`; // keep visual position
-      resolve();
-    },4200);
-  });
-}
-
-/* ------------------ WALLET MODAL ------------------ */
-function openWallet(){
-  $('#walletModal').style.display='flex';
-  $('#walletBalance').textContent = getPoints();
-  renderTxns();
-}
-function closeWallet(){ $('#walletModal').style.display='none'; }
-function clearLocal(){ localStorage.removeItem(KEY_TXN_HISTORY); renderTxns(); showToast('Local history cleared') }
+/* Reset daily (dev) */
+function resetGameDaily(){ localStorage.removeItem(KEY_GAME_DAY); localStorage.removeItem(KEY_GAME_EARNED); $('#gameEarned').textContent = '0'; showToast('Daily game reset (dev)'); }
 
 /* ------------------ INIT ------------------ */
 function init(){
+  // UI initial
   renderSites();
   renderQuiz();
   renderUpdates();
   ensureRef();
   updatePointsDisplay();
+
+  // show game limit
   $('#GAME_LIMIT').textContent = GAME_DAILY_LIMIT;
-  const ge = localStorage.getItem(KEY_GAME_EARNED) || '0';
-  if($('#gameEarned')) $('#gameEarned').textContent = ge;
-  updateGameProgress();
-  $('#spinNow').addEventListener('click', doSpin);
-  $('#resetSpinDev').addEventListener('click', ()=>{ localStorage.removeItem(KEY_LAST_SPIN); $('#lastSpinTxt').textContent='—'; showToast('Spin reset (dev)'); });
-  const l = localStorage.getItem(KEY_LAST_SPIN); if(l) $('#lastSpinTxt').textContent = l;
-  // quick wallet mirror
-  renderTxns();
+  $('#gameEarned').textContent = localStorage.getItem(KEY_GAME_EARNED) || '0';
+
+  // If page opened with ref param AND user clicks join channel externally, they may join — we credit locally when openChannel pressed.
 }
 init();
 
 </script>
-
-<!-- ===================== FIREBASE (Referral + Leaderboard + Spin persistence) ===================== -->
-<script type="module">
-  // ---- Replace with your Firebase config ----
-  const firebaseConfig = {
-    apiKey: "AIzaSyDNRTY-dPDXHIzpYPm9OClUr4ucZNmb3tM",
-    authDomain: "guj-recruit-site.firebaseapp.com",
-    projectId: "guj-recruit-site",
-    storageBucket: "guj-recruit-site.firebasestorage.app",
-    messagingSenderId: "183532061050",
-    appId: "1:183532061050:web:0c65a374c88f7c8b4116c3",
-    measurementId: "G-PWDR359Y97"
-  };
-
-  const missingConfig = !firebaseConfig.apiKey || firebaseConfig.apiKey === 'YOUR_API_KEY';
-
-  if(!missingConfig){
-    try{
-      const { initializeApp } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js');
-      const { getAuth, signInAnonymously, onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js');
-      const { getFirestore, doc, setDoc, getDoc, updateDoc, increment, arrayUnion, collection, query, orderBy, limit, getDocs } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js');
-
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth(app);
-      const db = getFirestore(app);
-      window._db = db;
-
-      window.FIREBASE_READY = true;
-      window.currentUserId = null;
-
-      // helper exposed to earlier script
-      window.addPointsFirebase = async function(n){
-        const ref = doc(db, 'users', window.currentUserId);
-        await setDoc(ref, { points: 0, joinedAt: new Date(), referrals: [], lastSpin: null }, { merge: true });
-        await updateDoc(ref, { points: increment(n) });
-        const snap = await getDoc(ref);
-        const pts = snap.data()?.points || 0;
-        // mirror local for offline consistency
-        localStorage.setItem(KEY_POINTS, String(pts));
-        const small = document.getElementById('pointsSmall');
-        if(small) small.textContent = pts;
-        return pts;
-      }
-
-      async function loadLeaderboard(){
-        const q = query(collection(db,'users'), orderBy('points','desc'), limit(10));
-        const snap = await getDocs(q);
-        const uid = window.currentUserId;
-        let html = '';
-        let rank = 1;
-        snap.forEach(docu=>{
-          const d = docu.data();
-          const me = (docu.id === uid);
-          const avatarText = (docu.id||'--').slice(0,2).toUpperCase();
-          html += `<div class="leader-row ${me?'leader-me':''}"><div style="display:flex;align-items:center"><div class="avatar">${avatarText}</div><div>#${rank} ${me?'You':docu.id.slice(0,6)}</div></div><div>${d.points||0} pts</div></div>`;
-          rank++;
-        });
-        if(!html) html = '<div class="leader-row"><div>No data yet</div><div>—</div></div>';
-        const lb = document.getElementById('leaderboard');
-        if(lb) lb.innerHTML = html;
-      }
-
-      function setRefUI(uid){
-        const link = location.origin + location.pathname + '?ref=' + encodeURIComponent(uid);
-        const elCode = document.getElementById('myRef');
-        const elLink = document.getElementById('myRefLink');
-        if(elCode) elCode.textContent = uid;
-        if(elLink) elLink.textContent = link;
-      }
-
-      function ensureUserDoc(uid){
-        return setDoc(doc(db,'users',uid), { points:0, referrals:[], referredBy: null, joinedAt: new Date(), lastSpin: null }, { merge:true });
-      }
-
-      async function handleReferral(uid){
-        const p = new URLSearchParams(location.search);
-        const ref = p.get('ref');
-        if(!ref || ref === uid) return;
-        const meRef = doc(db,'users',uid);
-        const meSnap = await getDoc(meRef);
-        const already = meSnap.exists() && meSnap.data().referredBy;
-        if(already) return;
-        await setDoc(meRef, { referredBy: ref }, { merge:true });
-        await updateDoc(doc(db,'users',ref), { points: increment(20), referrals: arrayUnion(uid) });
-        await updateDoc(meRef, { points: increment(10) });
-        showToast('Referral applied 🎉 +10 pts');
-        const snap = await getDoc(meRef);
-        const pts = snap.data()?.points || 0;
-        localStorage.setItem(KEY_POINTS, String(pts));
-        const pa = document.getElementById('pointsAnimated');
-        if(pa){ pa.textContent = pts + ' pts'; pa.dataset.val = pts; }
-        const ps = document.getElementById('pointsSmall'); if(ps) ps.textContent = pts;
-      }
-
-      onAuthStateChanged(auth, async (user)=>{
-        if(user){
-          window.currentUserId = user.uid;
-          await ensureUserDoc(user.uid);
-          setRefUI(user.uid);
-          // sync points from server into UI/local
-          const snap = await getDoc(doc(db,'users',user.uid));
-          const d = snap.data()||{};
-          const pts = d.points || 0;
-          localStorage.setItem(KEY_POINTS, String(pts));
-          const pa = document.getElementById('pointsAnimated');
-          if(pa){ pa.textContent = pts + ' pts'; pa.dataset.val = pts; }
-          const ps = document.getElementById('pointsSmall'); if(ps) ps.textContent = pts;
-          if(d.lastSpin) document.getElementById('lastSpinTxt').textContent = d.lastSpin;
-          // handle referral if opened with ?ref=
-          await handleReferral(user.uid);
-          // load leaderboard
-          await loadLeaderboard();
-        }
-      });
-
-      // Start anonymous login (if not already)
-      signInAnonymously(auth).catch(e=> console.error('Anon sign-in error', e));
-
-    }catch(e){
-      console.warn('Firebase failed to init. Falling back to local-only mode.', e);
-      window.FIREBASE_READY = false;
-    }
-  } else {
-    window.FIREBASE_READY = false;
-  }
-</script>
-
 </body>
 </html>
